@@ -10,12 +10,13 @@ const helmet = require('helmet')
 const rateLimit = require('express-rate-limit')
 const winston = require('winston')
 const { enhancedInitialSync } = require("./loadChatUtils")
+const PersistentStorage = require("./persistentStorage")
 
 
 const app = express()
 const port = process.env.PORT || 3000
 const isDev = process.env.NODE_ENV !== 'production'
-
+let sock = null 
 // Production middleware
 app.use(helmet({
   contentSecurityPolicy: false, // Disabled for WML compatibility
@@ -46,15 +47,15 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 // Storage with better persistence
-let sock = null
-let currentQR = null
-let messageStore = new Map()
-let contactStore = new Map()
-let chatStore = new Map()
-let connectionState = 'disconnected'
-let isFullySynced = false
-let syncAttempts = 0
+const storage = new PersistentStorage('./data')
+const persistentData = storage.loadAllData()
 
+let messageStore = persistentData.messages
+let contactStore = persistentData.contacts  
+let chatStore = persistentData.chats
+let connectionState = 'disconnected'
+let isFullySynced = persistentData.meta.isFullySynced
+let syncAttempts = persistentData.meta.syncAttempts
 // WML Constants
 const WML_DTD = '<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.3//EN" "http://www.wapforum.org/DTD/wml13.dtd">'
 const WMLSCRIPT_DTD = '<!DOCTYPE wmls PUBLIC "-//WAPFORUM//DTD WMLScript 1.3//EN" "http://www.wapforum.org/DTD/wmls13.dtd">'
@@ -64,6 +65,37 @@ function esc(s = '') {
   return String(s).replace(/[&<>"']/g, c => ({ 
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' 
   }[c]))
+}
+
+function saveContacts() {
+  storage.queueSave('contacts', contactStore)
+}
+
+function saveChats() {
+  storage.queueSave('chats', chatStore)
+}
+
+function saveMessages() {
+  storage.queueSave('messages', messageStore)
+}
+
+function saveMeta() {
+  const meta = {
+    isFullySynced,
+    syncAttempts,
+    lastSync: new Date().toISOString(),
+    contactsCount: contactStore.size,
+    chatsCount: chatStore.size,
+    messagesCount: messageStore.size
+  }
+  storage.queueSave('meta', meta)
+}
+
+function saveAll() {
+  saveContacts()
+  saveChats() 
+  saveMessages()
+  saveMeta()
 }
 
 function wmlDoc(cards, scripts = '') {
@@ -84,7 +116,7 @@ function sendWml(res, cards, scripts = '') {
 function card(id, title, inner, ontimer = null) {
   const timerAttr = ontimer ? ` ontimer="${ontimer}"` : ''
   return `<card id="${esc(id)}" title="${esc(title)}"${timerAttr}>
-    <timer value="600"/> <!-- 10 minute auto-refresh -->
+   
     ${inner}
   </card>`
 }
@@ -136,7 +168,7 @@ function messageText(msg) {
 }
 
 function resultCard(title, lines = [], backHref = '/wml/home.wml', autoRefresh = true) {
-  const refreshTimer = autoRefresh ? '<timer value="30"/>' : ''
+  const refreshTimer = autoRefresh ? '' : ''
   const onTimer = autoRefresh ? ` ontimer="${backHref}"` : ''
   
   const body = `
@@ -250,7 +282,7 @@ app.get(['/wml', '/wml/home.wml'], (req, res) => {
   `
   
   const body = `
-    <timer value="300"/> <!-- 5 min refresh -->
+  
     <p><b>WhatsApp API Center</b></p>
     <p>Status: ${connected ? '<b>Connected</b>' : '<em>Disconnected</em>'}  ${esc(connectionState)}</p>
     <p>Sync: ${isFullySynced ? 'Complete' : 'Pending'}  Contacts: ${contactStore.size}  Chats: ${chatStore.size}</p>
@@ -399,7 +431,7 @@ app.get('/wml/status.wml', (req, res) => {
   const uptime = Math.floor(process.uptime() / 60)
   
   const body = `
-    <timer value="60"/> <!-- 1 min refresh -->
+   
     <p><b>System Status</b></p>
     <p>Connection: ${connected ? '<b>Active</b>' : '<em>Inactive</em>'}</p>
     <p>State: ${esc(connectionState)}</p>
@@ -434,7 +466,7 @@ app.get('/wml/status.wml', (req, res) => {
 app.get('/wml/qr.wml', (req, res) => {
   const body = currentQR
     ? `
-      <timer value="30"/> <!-- 30 sec refresh -->
+    
       <p><b>QR Code Available</b></p>
       <p>Scan with WhatsApp:</p>
       <p><img src="/api/qr/image?format=wbmp" alt="QR Code" localscr="qr.wbmp"/></p>
@@ -449,7 +481,7 @@ app.get('/wml/qr.wml', (req, res) => {
 </p>
     `
     : `
-      <timer value="10"/> <!-- 10 sec refresh when no QR -->
+   
       <p><b>QR Code Not Available</b></p>
       <p>Status: ${esc(connectionState)}</p>
       <p>Please wait or check connection...</p>
@@ -496,11 +528,27 @@ app.get("/api/qr/wml-wbmp", (req, res) => {
 
 // Enhanced Contacts with search and pagination
 app.get('/wml/contacts.wml', (req, res) => {
+  const userAgent = req.headers['user-agent'] || ''
+  const isOldNokia = /Nokia|Series40|MAUI|UP\.Browser/i.test(userAgent)
+  
   const page = Math.max(1, parseInt(req.query.page || '1'))
-  const limit = Math.max(1, Math.min(20, parseInt(req.query.limit || '10')))
+  
+  // Adatta il limite in base al dispositivo
+  let limit
+  if (isOldNokia) {
+    limit = 3 // Nokia vecchi: massimo 3 contatti per pagina
+  } else {
+    limit = Math.max(1, Math.min(20, parseInt(req.query.limit || '10')))
+  }
+  
   const search = req.query.q || ''
   
   let contacts = Array.from(contactStore.values())
+  
+  // Limita il numero totale di contatti per dispositivi Nokia vecchi
+  if (isOldNokia) {
+    contacts = contacts.slice(0, 30) // Massimo 30 contatti totali
+  }
   
   // Apply search filter
   if (search) {
@@ -516,51 +564,103 @@ app.get('/wml/contacts.wml', (req, res) => {
   const start = (page - 1) * limit
   const items = contacts.slice(start, start + limit)
 
-  const searchForm = search ? 
-    `<p><b>Search Results for:</b> ${esc(search)} (${total} found)</p>` :
-    `<p><b>All Contacts</b> (${total} total)</p>`
+  if (isOldNokia) {
+    // Versione semplificata per Nokia vecchi
+    const searchForm = search ? 
+      `<p>Search: ${esc(search)} (${total})</p>` :
+      `<p>Contacts (${total})</p>`
 
-  const list = items.map((c, idx) => {
-    const name = c.name || c.notify || c.verifiedName || 'Unknown'
-    const jid = c.id
-    const number = jidFriendly(jid)
-    return `<p><b>${start + idx + 1}.</b> ${esc(name)}<br/>
-      <small>${esc(number)}</small><br/>
-      <a href="/wml/contact.wml?jid=${encodeURIComponent(jid)}">[View]</a> |
-      <a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;limit=15">[Chat]</a> |
-      <a href="wtai://wp/mc;${number}">[Call]</a>
-    </p>`
-  }).join('') || '<p>No contacts found.</p>'
+    const list = items.map((c, idx) => {
+      const name = c.name || c.notify || c.verifiedName || 'Unknown'
+      const jid = c.id
+      const number = jidFriendly(jid)
+      
+      // Tronca i nomi lunghi per i Nokia vecchi
+      const shortName = name.length > 15 ? name.substring(0, 12) + '...' : name
+      const shortNumber = number.length > 12 ? number.substring(0, 10) + '..' : number
+      
+      return `<p>${start + idx + 1}. ${esc(shortName)}<br/>${esc(shortNumber)}<br/>
+<a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}">Chat</a> 
+<a href="wtai://wp/mc;${number}">Call</a></p>`
+    }).join('') || '<p>No contacts</p>'
 
-  // Pagination
-  const prevPage = page > 1 ? `<a href="/wml/contacts.wml?page=${page - 1}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}" accesskey="2">[2] Prev</a>` : ''
-  const nextPage = start + limit < total ? `<a href="/wml/contacts.wml?page=${page + 1}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}" accesskey="3">[3] Next</a>` : ''
-  const pagination = `<p>${prevPage} ${prevPage && nextPage ? '|' : ''} ${nextPage}</p>`
+    // Navigazione semplice
+    const prevPage = page > 1 ? 
+      `<p><a href="/wml/contacts.wml?page=${page - 1}" accesskey="2">2-Prev</a></p>` : ''
+    const nextPage = start + limit < total ? 
+      `<p><a href="/wml/contacts.wml?page=${page + 1}" accesskey="3">3-Next</a></p>` : ''
 
-  const body = `
-    <timer value="120"/> <!-- 2 min refresh -->
-    ${searchForm}
+    const body = `
+      ${searchForm}
+      <p>Page ${page}/${Math.ceil(total/limit) || 1}</p>
+      ${list}
+      ${prevPage}
+      ${nextPage}
+      <p><a href="/wml/home.wml" accesskey="0">0-Home</a></p>
+    `
     
-    ${searchBox('/wml/contacts.wml', 'Search contacts...')}
+    // Usa DOCTYPE WML 1.1 per compatibilità
+    const legacyCard = `<card id="contacts" title="Contacts">${body}</card>`
+    const legacyDoc = `<?xml version="1.0"?>
+<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN" "http://www.wapforum.org/DTD/wml_1.1.xml">
+<wml>
+<head><meta http-equiv="Cache-Control" content="max-age=0"/></head>
+${legacyCard}
+</wml>`
     
-    <p><b>Page ${page}/${Math.ceil(total/limit) || 1}</b></p>
-    ${list}
-    ${pagination}
+    res.setHeader('Content-Type', 'text/vnd.wap.wml; charset=ISO-8859-1')
+    res.setHeader('Cache-Control', 'no-cache')
+    res.send(legacyDoc)
     
-    <p>
-      <a href="/wml/contacts.search.wml" accesskey="1">[1] Advanced Search</a>
-      ${prevPage ? ' | ' + prevPage : ''}
-      ${nextPage ? ' | ' + nextPage : ''}
-    </p>
+  } else {
+    // Versione completa per dispositivi moderni
+    const searchForm = search ? 
+      `<p><b>Search Results for:</b> ${esc(search)} (${total} found)</p>` :
+      `<p><b>All Contacts</b> (${total} total)</p>`
+
+    const list = items.map((c, idx) => {
+      const name = c.name || c.notify || c.verifiedName || 'Unknown'
+      const jid = c.id
+      const number = jidFriendly(jid)
+      return `<p><b>${start + idx + 1}.</b> ${esc(name)}<br/>
+        <small>${esc(number)}</small><br/>
+        <a href="/wml/contact.wml?jid=${encodeURIComponent(jid)}">[View]</a> |
+        <a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;limit=15">[Chat]</a> |
+        <a href="wtai://wp/mc;${number}">[Call]</a> |
+        <a href="wtai://wp/ms;${number};">[SMS]</a><br/>
+      </p>`
+    }).join('') || '<p>No contacts found.</p>'
+
+    // Pagination
+    const prevPage = page > 1 ? `<a href="/wml/contacts.wml?page=${page - 1}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}" accesskey="2">[2] Prev</a>` : ''
+    const nextPage = start + limit < total ? `<a href="/wml/contacts.wml?page=${page + 1}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}" accesskey="3">[3] Next</a>` : ''
+    const pagination = `<p>${prevPage} ${prevPage && nextPage ? '|' : ''} ${nextPage}</p>`
+
+    const body = `
+      <timer value="120"/>
+      ${searchForm}
+      
+      ${searchBox('/wml/contacts.wml', 'Search contacts...')}
+      
+      <p><b>Page ${page}/${Math.ceil(total/limit) || 1}</b></p>
+      ${list}
+      ${pagination}
+      
+      <p>
+        <a href="/wml/contacts.search.wml" accesskey="1">[1] Advanced Search</a>
+        ${prevPage ? ' | ' + prevPage : ''}
+        ${nextPage ? ' | ' + nextPage : ''}
+      </p>
+      
+      ${navigationBar()}
+      
+      <do type="accept" label="Refresh">
+        <go href="/wml/contacts.wml?page=${page}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}"/>
+      </do>
+    `
     
-    ${navigationBar()}
-    
-    <do type="accept" label="Refresh">
-      <go href="/wml/contacts.wml?page=${page}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}"/>
-    </do>
-  `
-  
-  sendWml(res, card('contacts', 'Contacts', body))
+    sendWml(res, card('contacts', 'Contacts', body))
+  }
 })
 
 // Enhanced Contact Detail page with WTAI integration
@@ -886,7 +986,7 @@ app.get('/wml/groups.wml', async (req, res) => {
     }).join('') || '<p>No groups found.</p>'
 
     const body = `
-      <timer value="180"/> <!-- 3 min refresh -->
+     <!-- 3 min refresh -->
       <p><b>My Groups (${groupList.length})</b></p>
       
       ${searchBox('/wml/groups.search.wml', 'Search groups...')}
@@ -1060,7 +1160,7 @@ app.get('/wml/live-status.wml', (req, res) => {
   const refreshInterval = req.query.interval || '30'
   
   const body = `
-    <timer value="${refreshInterval}"/>
+   
     <p><b>Live Status Monitor</b></p>
     <p>Updates every ${refreshInterval} seconds</p>
     
@@ -1193,7 +1293,7 @@ async function performInitialSync() {
 
 
 
-connectWithBetterSync()
+
 // Production-ready connection with better error handling
 async function connectWithBetterSync() {
   try {
@@ -1287,12 +1387,15 @@ async function connectWithBetterSync() {
       if (isLatest) {
         logger.info("Bulk history sync complete")
         isFullySynced = true
+         saveAll()
       }
     })
 
     // Real-time message handling
     sock.ev.on("messages.upsert", async ({ messages }) => {
+      let newMessagesCount = 0 // A
       for (const msg of messages) {
+          newMessagesCount++ // ADD TH
         if (msg.key?.id) {
           messageStore.set(msg.key.id, msg)
           const chatId = msg.key.remoteJid
@@ -1319,6 +1422,11 @@ async function connectWithBetterSync() {
           }
         }
       }
+       // ADD THESE LINES:
+  if (newMessagesCount > 0) {
+    saveMessages()
+    saveChats()
+  }
     })
 
     // Contact and chat updates
@@ -1327,6 +1435,7 @@ async function connectWithBetterSync() {
       for (const c of contacts) {
         contactStore.set(c.id, c)
       }
+        saveContacts() // ADD THIS LINE
     })
 
     sock.ev.on("contacts.update", (contacts) => {
@@ -1358,6 +1467,8 @@ async function connectWithBetterSync() {
   }
 }
 
+connectWithBetterSync()
+
 // Keep all existing API endpoints from the original code...
 // [Include all /api/ routes here]
 
@@ -1365,10 +1476,26 @@ async function connectWithBetterSync() {
 const gracefulShutdown = async (signal) => {
   logger.info(`Received ${signal}. Shutting down gracefully...`)
   try {
-    if (sock) {
+
+
+       // ADD THESE LINES:
+    logger.info('Saving all data before shutdown...')
+    await storage.saveImmediately('contacts', contactStore)
+    await storage.saveImmediately('chats', chatStore)
+    await storage.saveImmediately('messages', messageStore)
+    await storage.saveImmediately('meta', {
+      isFullySynced,
+      syncAttempts,
+      lastSync: new Date().toISOString()
+    })
+    logger.info('Data saved successfully')
+
+     if (typeof sock !== 'undefined' && sock) {
       logger.info('Closing WhatsApp connection...')
       await sock.end()
       logger.info('WhatsApp connection closed')
+    } else {
+      logger.info('No WhatsApp connection to close')
     }
     
     contactStore.clear()
@@ -1405,6 +1532,15 @@ const server = app.listen(port, () => {
   logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`)
   logger.info('WML endpoints available at /wml/')
   logger.info('API endpoints available at /api/')
+
+  setInterval(() => {
+  storage.cleanupOldMessages(messageStore, chatStore, 100)
+}, 60 * 60 * 1000) // every hour
+
+setInterval(() => {
+  saveAll()
+  logger.info("Periodic save completed")
+}, 10 * 60 * 1000)
 })
 
 server.on('error', (error) => {
@@ -3134,7 +3270,7 @@ app.get('/wml/me.wml', async (req, res) => {
     }
     
     const body = `
-      <timer value="120"/>
+     
       <p><b>My Profile</b></p>
       <p>Name: <b>${esc(user?.name || user?.notify || 'Unknown')}</b></p>
       <p>Number: ${esc(user?.id?.replace('@s.whatsapp.net', '') || 'Unknown')}</p>
@@ -3228,7 +3364,7 @@ app.get('/wml/privacy.wml', async (req, res) => {
     }
     
     const body = `
-      <timer value="180"/>
+    
       <p><b>Privacy Settings</b></p>
       
       ${privacySettings ? `
@@ -3371,7 +3507,7 @@ app.get('/wml/debug.wml', (req, res) => {
   const uptime = Math.floor(process.uptime())
   
   const body = `
-    <timer value="30"/>
+
     <p><b>Debug Information</b></p>
     
     <p><b>Connection:</b></p>
