@@ -1,0 +1,953 @@
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-28T16:49:38.069Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T16:49:38.070Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T16:49:38.070Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T16:49:38.070Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:49:40.674Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:50:40.693Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:51:00.744Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:51:20.773Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:51:40.790Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:52:00.810Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-28T16:52:20.820Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:52:26.813Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:53:26.825Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:53:46.839Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:54:06.856Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:54:26.867Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:54:46.877Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-28T16:55:06.893Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:55:12.775Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:56:12.780Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:56:32.799Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:56:52.814Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:57:12.823Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:57:32.837Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-28T16:57:52.860Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:57:58.387Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:58:58.404Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:59:18.418Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:59:38.433Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T16:59:58.453Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T17:00:18.464Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-28T17:00:38.477Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T17:00:44.203Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T17:01:44.211Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T17:02:04.228Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T17:02:24.247Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T17:02:44.257Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T17:03:04.273Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-28T17:03:24.278Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T17:03:29.799Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-28T17:04:10.385Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3500","timestamp":"2025-08-28T17:04:11.670Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T17:04:11.671Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T17:04:11.671Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T17:04:11.672Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T17:04:12.298Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T17:05:12.328Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T17:05:32.369Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T17:05:52.397Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T17:06:12.419Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3500","timestamp":"2025-08-28T18:00:53.617Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T18:00:53.618Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T18:00:53.618Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T18:00:53.618Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:00:54.376Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:01:54.408Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:02:14.447Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:02:34.466Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:02:54.486Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:03:14.509Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-28T18:03:34.530Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:03:40.282Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:04:40.310Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:05:00.328Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:05:20.337Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:05:40.352Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:06:00.356Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-28T18:06:20.368Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:06:26.094Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:07:26.113Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:07:46.128Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-28T18:07:54.368Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 80","timestamp":"2025-08-28T18:07:55.336Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T18:07:55.337Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T18:07:55.337Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T18:07:55.337Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:07:56.024Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-28T18:08:37.199Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 80","timestamp":"2025-08-28T18:08:38.149Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T18:08:38.150Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T18:08:38.150Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T18:08:38.151Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:08:38.764Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:09:38.801Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:09:58.832Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:10:18.848Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-28T18:10:20.256Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 80","timestamp":"2025-08-28T18:10:21.221Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T18:10:21.222Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T18:10:21.222Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T18:10:21.223Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T18:10:22.220Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-28T18:11:00.239Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-28T18:11:07.363Z"}
+{"level":"info","message":"History batch - Chats: 117, Contacts: 298, Messages: 189","timestamp":"2025-08-28T18:11:10.058Z"}
+{"level":"info","message":"Bulk history sync complete","timestamp":"2025-08-28T18:11:10.058Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-28T18:11:12.373Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 80","timestamp":"2025-08-28T18:11:16.834Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T18:11:16.836Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T18:11:16.836Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T18:11:16.836Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-28T18:11:17.792Z"}
+{"level":"info","message":"History batch - Chats: 21, Contacts: 21, Messages: 4977","timestamp":"2025-08-28T18:11:18.310Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 7, Messages: 4972","timestamp":"2025-08-28T18:11:18.548Z"}
+{"level":"info","message":"History batch - Chats: 10, Contacts: 12, Messages: 4944","timestamp":"2025-08-28T18:11:20.034Z"}
+{"level":"info","message":"History batch - Chats: 4, Contacts: 6, Messages: 4912","timestamp":"2025-08-28T18:11:22.594Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-28T18:11:22.794Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 80","timestamp":"2025-08-28T18:11:29.727Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T18:11:29.728Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T18:11:29.728Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T18:11:29.729Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-28T18:11:30.895Z"}
+{"level":"info","message":"History batch - Chats: 27, Contacts: 27, Messages: 4954","timestamp":"2025-08-28T18:11:31.399Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 7, Messages: 4970","timestamp":"2025-08-28T18:11:31.577Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 10, Messages: 4955","timestamp":"2025-08-28T18:11:32.193Z"}
+{"level":"info","message":"History batch - Chats: 9, Contacts: 12, Messages: 4958","timestamp":"2025-08-28T18:11:34.707Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-28T18:11:35.897Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 80","timestamp":"2025-08-28T18:11:48.848Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T18:11:48.849Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T18:11:48.849Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T18:11:48.850Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-28T18:11:50.772Z"}
+{"level":"info","message":"History batch - Chats: 24, Contacts: 24, Messages: 4981","timestamp":"2025-08-28T18:11:50.968Z"}
+{"level":"info","message":"History batch - Chats: 4, Contacts: 6, Messages: 4984","timestamp":"2025-08-28T18:11:51.193Z"}
+{"level":"info","message":"History batch - Chats: 12, Contacts: 16, Messages: 4967","timestamp":"2025-08-28T18:11:51.829Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-28T18:11:55.780Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 80","timestamp":"2025-08-28T18:13:21.779Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T18:13:21.781Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T18:13:21.781Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T18:13:21.781Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-28T18:13:23.427Z"}
+{"level":"info","message":"History batch - Chats: 47, Contacts: 47, Messages: 4992","timestamp":"2025-08-28T18:13:23.540Z"}
+{"level":"info","message":"History batch - Chats: 11, Contacts: 15, Messages: 4970","timestamp":"2025-08-28T18:13:24.242Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 8, Messages: 4972","timestamp":"2025-08-28T18:13:24.502Z"}
+{"level":"info","message":"History batch - Chats: 6, Contacts: 9, Messages: 4977","timestamp":"2025-08-28T18:13:24.742Z"}
+{"level":"info","message":"History batch - Chats: 9, Contacts: 12, Messages: 4972","timestamp":"2025-08-28T18:13:24.982Z"}
+{"level":"info","message":"History batch - Chats: 32, Contacts: 35, Messages: 4946","timestamp":"2025-08-28T18:13:25.259Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 650","timestamp":"2025-08-28T18:13:25.363Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-28T18:13:28.443Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 80","timestamp":"2025-08-28T18:14:14.680Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T18:14:14.681Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T18:14:14.681Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T18:14:14.682Z"}
+{"level":"info","message":"Connection closed. Should reconnect: false","timestamp":"2025-08-28T18:14:18.341Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-28T20:00:12.234Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 80","timestamp":"2025-08-28T20:00:13.579Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T20:00:13.581Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T20:00:13.581Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T20:00:13.581Z"}
+{"level":"info","message":"Connection closed. Should reconnect: false","timestamp":"2025-08-28T20:00:15.900Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-28T20:01:08.819Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-28T20:01:09.704Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T20:01:09.705Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T20:01:09.705Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T20:01:09.705Z"}
+{"level":"info","message":"Connection closed. Should reconnect: false","timestamp":"2025-08-28T20:01:11.292Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-28T20:04:34.313Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-28T20:04:39.102Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T20:04:39.103Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T20:04:39.104Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T20:04:39.104Z"}
+{"level":"info","message":"Connection closed. Should reconnect: false","timestamp":"2025-08-28T20:04:40.397Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-28T20:11:33.061Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-28T20:11:44.404Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T20:11:44.406Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T20:11:44.406Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T20:11:44.406Z"}
+{"level":"info","message":"Connection closed. Should reconnect: false","timestamp":"2025-08-28T20:11:45.405Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-28T20:12:46.897Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-28T20:12:55.866Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T20:12:55.867Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T20:12:55.867Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T20:12:55.868Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:12:56.799Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:13:56.830Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:14:16.887Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:14:36.931Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:14:56.942Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:15:16.964Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-28T20:15:36.979Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:15:42.508Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:16:42.522Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:17:02.533Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:17:22.554Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:17:42.564Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:18:02.575Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-28T20:18:22.597Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:18:28.516Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:19:28.546Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:19:48.565Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:20:08.584Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:20:28.605Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:20:48.625Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-28T20:21:08.646Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:21:14.386Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:22:14.409Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:22:34.429Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:22:54.449Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:23:14.468Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:23:34.490Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-28T20:23:54.511Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:24:00.170Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:25:00.184Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:25:20.193Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-28T20:25:27.773Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-28T20:25:28.557Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T20:25:28.558Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T20:25:28.559Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T20:25:28.559Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:25:29.291Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:26:29.327Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:26:49.343Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:27:09.352Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:27:29.378Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-28T20:27:49.389Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-28T20:28:06.995Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-28T20:28:13.648Z"}
+{"level":"info","message":"History batch - Chats: 117, Contacts: 298, Messages: 175","timestamp":"2025-08-28T20:28:16.513Z"}
+{"level":"info","message":"Bulk history sync complete","timestamp":"2025-08-28T20:28:16.513Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-28T20:28:18.662Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-28T20:28:24.831Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T20:28:24.833Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T20:28:24.833Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T20:28:24.833Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-28T20:28:25.790Z"}
+{"level":"info","message":"History batch - Chats: 21, Contacts: 21, Messages: 4978","timestamp":"2025-08-28T20:28:26.192Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 7, Messages: 4971","timestamp":"2025-08-28T20:28:26.422Z"}
+{"level":"info","message":"History batch - Chats: 10, Contacts: 12, Messages: 4944","timestamp":"2025-08-28T20:28:27.395Z"}
+{"level":"info","message":"History batch - Chats: 4, Contacts: 6, Messages: 4917","timestamp":"2025-08-28T20:28:30.510Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-28T20:28:30.795Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-28T20:29:16.063Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T20:29:16.065Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T20:29:16.065Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T20:29:16.065Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-28T20:29:19.097Z"}
+{"level":"info","message":"History batch - Chats: 27, Contacts: 27, Messages: 4952","timestamp":"2025-08-28T20:29:19.364Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 7, Messages: 4970","timestamp":"2025-08-28T20:29:19.982Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 10, Messages: 4955","timestamp":"2025-08-28T20:29:20.467Z"}
+{"level":"info","message":"History batch - Chats: 9, Contacts: 12, Messages: 4958","timestamp":"2025-08-28T20:29:21.092Z"}
+{"level":"info","message":"History batch - Chats: 11, Contacts: 17, Messages: 9953","timestamp":"2025-08-28T20:29:21.808Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 4, Messages: 4984","timestamp":"2025-08-28T20:29:22.601Z"}
+{"level":"info","message":"History batch - Chats: 11, Contacts: 15, Messages: 4967","timestamp":"2025-08-28T20:29:23.576Z"}
+{"level":"info","message":"History batch - Chats: 29, Contacts: 34, Messages: 4992","timestamp":"2025-08-28T20:29:23.960Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-28T20:29:24.101Z"}
+{"level":"info","message":"History batch - Chats: 9, Contacts: 13, Messages: 4970","timestamp":"2025-08-28T20:29:24.266Z"}
+{"level":"info","message":"History batch - Chats: 6, Contacts: 9, Messages: 4977","timestamp":"2025-08-28T20:29:28.174Z"}
+{"level":"info","message":"History batch - Chats: 7, Contacts: 10, Messages: 4972","timestamp":"2025-08-28T20:29:35.177Z"}
+{"level":"info","message":"History batch - Chats: 31, Contacts: 34, Messages: 5590","timestamp":"2025-08-28T20:29:41.088Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-28T20:47:39.301Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-28T20:47:45.237Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-28T20:47:50.253Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-28T21:06:17.939Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-28T21:13:02.315Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T21:13:02.316Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T21:13:02.316Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T21:13:02.317Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-28T21:13:03.329Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-28T21:13:08.340Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-28T21:13:16.693Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T21:13:16.694Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T21:13:16.695Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T21:13:16.695Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-28T21:13:17.721Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-28T21:13:22.727Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-28T21:13:25.577Z"}
+{"level":"info","message":"Nokia WhatsApp Gateway initialized","timestamp":"2025-08-28T21:13:26.560Z"}
+{"level":"info","message":"Configuration: Max 300 contacts, 500 messages","timestamp":"2025-08-28T21:13:26.561Z"}
+{"level":"info","message":"Compatible with Nokia Series 60, Symbian, and modern WAP browsers","timestamp":"2025-08-28T21:13:26.561Z"}
+{"level":"info","message":"Nokia-optimized WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-28T21:13:26.562Z"}
+{"level":"info","message":"Nokia Series 60 and Symbian compatibility enabled","timestamp":"2025-08-28T21:13:26.562Z"}
+{"level":"info","message":"Memory usage optimized for mobile devices","timestamp":"2025-08-28T21:13:26.562Z"}
+{"level":"info","message":"Nokia client connected successfully!","timestamp":"2025-08-28T21:13:27.732Z"}
+{"level":"info","message":"Starting Nokia-optimized sync (attempt 1)","timestamp":"2025-08-28T21:13:30.746Z"}
+{"level":"info","message":"Waiting for contacts via events...","timestamp":"2025-08-28T21:13:30.746Z"}
+{"level":"info","message":"Nokia client detected: Nokia7210/1.0 (4.18) Profile/MIDP-1.0 Configuration/CLDC-1.0","timestamp":"2025-08-28T21:13:33.274Z"}
+{"level":"info","message":"Contacts available: 0","timestamp":"2025-08-28T21:13:33.752Z"}
+{"level":"info","message":"Retrieved 27 groups","timestamp":"2025-08-28T21:13:34.192Z"}
+{"level":"info","message":"Total chats in store: 27","timestamp":"2025-08-28T21:13:36.205Z"}
+{"level":"info","message":"Nokia sync completed: 0 contacts, 27 chats","timestamp":"2025-08-28T21:13:36.206Z"}
+{"level":"info","message":"Nokia client detected: Nokia7210/1.0 (4.18) Profile/MIDP-1.0 Configuration/CLDC-1.0","timestamp":"2025-08-28T21:13:45.279Z"}
+{"level":"info","message":"Nokia client detected: Nokia7210/1.0 (4.18) Profile/MIDP-1.0 Configuration/CLDC-1.0","timestamp":"2025-08-28T21:13:58.671Z"}
+{"level":"info","message":"Nokia client detected: Nokia7210/1.0 (4.18) Profile/MIDP-1.0 Configuration/CLDC-1.0","timestamp":"2025-08-28T21:14:07.210Z"}
+{"level":"info","message":"Nokia client detected: Nokia7210/1.0 (4.18) Profile/MIDP-1.0 Configuration/CLDC-1.0","timestamp":"2025-08-28T21:14:18.250Z"}
+{"level":"info","message":"Nokia client detected: Nokia7210/1.0 (4.18) Profile/MIDP-1.0 Configuration/CLDC-1.0","timestamp":"2025-08-28T21:14:31.299Z"}
+{"level":"info","message":"Nokia gateway received SIGINT. Shutting down...","timestamp":"2025-08-28T21:14:55.097Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-28T21:14:56.258Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-28T21:14:56.260Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-28T21:14:56.260Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-28T21:14:56.260Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-28T21:14:57.332Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T08:25:59.294Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T08:25:59.295Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T08:25:59.296Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T08:25:59.296Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T08:26:00.498Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T08:26:05.510Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:04:01.638Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:04:28.484Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:04:33.503Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:04:38.521Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:04:43.540Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:04:48.560Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:04:53.590Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:04:58.597Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:05:03.607Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:05:08.617Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:05:13.631Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:05:18.644Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:05:23.660Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:05:28.668Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:05:33.679Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:05:38.700Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:05:43.722Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:05:48.735Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:05:53.759Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:05:58.790Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:06:03.806Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:06:08.829Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:06:13.843Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:06:18.856Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:06:23.872Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:06:47.177Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:07:05.941Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T09:07:10.956Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T09:07:17.116Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T09:07:22.121Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T10:31:33.476Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T10:37:37.763Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T10:37:37.764Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T10:37:37.765Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T10:37:37.765Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T10:37:38.940Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T10:37:43.944Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T10:42:38.470Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T10:49:54.965Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T10:49:54.966Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T10:49:54.967Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T10:49:54.967Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T10:49:55.897Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T10:50:00.911Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T12:06:14.556Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T12:06:14.557Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T12:06:14.557Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T12:06:14.557Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T12:06:15.949Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T12:06:20.949Z"}
+{"level":"info","message":"Loading chat history for 393298823346@s.whatsapp.net, limit: 15","timestamp":"2025-08-29T12:18:09.995Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T12:25:42.338Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T12:25:43.351Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T12:25:43.352Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T12:25:43.352Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T12:25:43.352Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T12:25:44.403Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T12:25:49.411Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T12:27:08.611Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T12:27:09.500Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T12:27:09.501Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T12:27:09.502Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T12:27:09.503Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T12:27:10.571Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T12:27:15.575Z"}
+{"level":"info","message":"Connection closed. Should reconnect: false","timestamp":"2025-08-29T12:28:17.748Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T12:28:45.346Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T12:28:46.504Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T12:28:46.506Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T12:28:46.506Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T12:28:46.506Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:28:47.484Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:29:47.514Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T12:29:58.282Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T12:30:05.018Z"}
+{"level":"info","message":"History batch - Chats: 117, Contacts: 298, Messages: 171","timestamp":"2025-08-29T12:30:07.798Z"}
+{"level":"info","message":"Bulk history sync complete","timestamp":"2025-08-29T12:30:07.798Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T12:30:10.020Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 4, Messages: 4911","timestamp":"2025-08-29T12:30:12.964Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 4970","timestamp":"2025-08-29T12:30:16.285Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 5, Messages: 4935","timestamp":"2025-08-29T12:30:18.972Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 0, Messages: 51","timestamp":"2025-08-29T12:30:21.571Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 4944","timestamp":"2025-08-29T12:30:22.188Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4944","timestamp":"2025-08-29T12:30:25.340Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 5, Messages: 4966","timestamp":"2025-08-29T12:30:28.476Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4953","timestamp":"2025-08-29T12:30:31.645Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 4, Messages: 4956","timestamp":"2025-08-29T12:30:34.096Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 7, Messages: 4978","timestamp":"2025-08-29T12:30:37.433Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 4984","timestamp":"2025-08-29T12:30:44.566Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 9, Messages: 4959","timestamp":"2025-08-29T12:30:49.739Z"}
+{"level":"info","message":"History batch - Chats: 25, Contacts: 22, Messages: 4988","timestamp":"2025-08-29T12:30:53.751Z"}
+{"level":"info","message":"History batch - Chats: 7, Contacts: 9, Messages: 4968","timestamp":"2025-08-29T12:30:57.855Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 5, Messages: 4971","timestamp":"2025-08-29T12:31:00.205Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 7, Messages: 4976","timestamp":"2025-08-29T12:31:03.963Z"}
+{"level":"info","message":"History batch - Chats: 4, Contacts: 8, Messages: 4970","timestamp":"2025-08-29T12:31:07.364Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 610","timestamp":"2025-08-29T12:31:09.768Z"}
+{"level":"info","message":"History batch - Chats: 32, Contacts: 16, Messages: 4946","timestamp":"2025-08-29T12:31:10.230Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T12:32:37.672Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T12:32:38.665Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T12:32:38.666Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T12:32:38.666Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T12:32:38.666Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T12:32:40.117Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T12:32:45.126Z"}
+{"level":"info","message":"Connection closed. Should reconnect: false","timestamp":"2025-08-29T12:33:41.638Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T12:33:50.223Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T12:33:51.165Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T12:33:51.166Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T12:33:51.167Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T12:33:51.167Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:33:51.971Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T12:34:46.516Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T12:34:53.756Z"}
+{"level":"info","message":"History batch - Chats: 117, Contacts: 298, Messages: 171","timestamp":"2025-08-29T12:34:55.952Z"}
+{"level":"info","message":"Bulk history sync complete","timestamp":"2025-08-29T12:34:55.953Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T12:34:58.760Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 4, Messages: 4911","timestamp":"2025-08-29T12:34:59.850Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 4970","timestamp":"2025-08-29T12:35:03.238Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 5, Messages: 4935","timestamp":"2025-08-29T12:35:05.045Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 0, Messages: 59","timestamp":"2025-08-29T12:35:07.460Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 4944","timestamp":"2025-08-29T12:35:08.167Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4944","timestamp":"2025-08-29T12:35:10.922Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 5, Messages: 4966","timestamp":"2025-08-29T12:35:13.572Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4953","timestamp":"2025-08-29T12:35:16.302Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 4, Messages: 4956","timestamp":"2025-08-29T12:35:19.085Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 7, Messages: 4978","timestamp":"2025-08-29T12:35:21.702Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 4984","timestamp":"2025-08-29T12:35:24.267Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 9, Messages: 4959","timestamp":"2025-08-29T12:35:29.322Z"}
+{"level":"info","message":"History batch - Chats: 25, Contacts: 22, Messages: 4988","timestamp":"2025-08-29T12:35:36.629Z"}
+{"level":"info","message":"History batch - Chats: 7, Contacts: 9, Messages: 4968","timestamp":"2025-08-29T12:35:43.558Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 5, Messages: 4971","timestamp":"2025-08-29T12:35:50.732Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 7, Messages: 4976","timestamp":"2025-08-29T12:35:57.405Z"}
+{"level":"info","message":"History batch - Chats: 4, Contacts: 8, Messages: 4970","timestamp":"2025-08-29T12:36:03.463Z"}
+{"level":"info","message":"History batch - Chats: 32, Contacts: 16, Messages: 5556","timestamp":"2025-08-29T12:36:09.640Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T12:37:05.127Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T12:37:06.284Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T12:37:06.286Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T12:37:06.286Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T12:37:06.286Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T12:37:07.335Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T12:37:12.346Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T12:38:25.128Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T12:38:53.895Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T12:38:53.896Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T12:38:53.896Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T12:38:53.897Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T12:38:54.882Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T12:38:59.882Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T12:40:17.766Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T12:40:18.944Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T12:40:18.946Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T12:40:18.946Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T12:40:18.946Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T12:40:20.018Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T12:40:25.021Z"}
+{"level":"info","message":"Connection closed. Should reconnect: false","timestamp":"2025-08-29T12:41:50.294Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T12:41:57.376Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T12:41:58.363Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T12:41:58.365Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T12:41:58.365Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T12:41:58.365Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:41:58.973Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:42:59.002Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:43:19.024Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:43:39.043Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T12:43:55.128Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T12:43:56.480Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T12:43:56.481Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T12:43:56.481Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T12:43:56.481Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:43:57.253Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:44:57.283Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:45:17.308Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:45:37.331Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T12:45:52.687Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T12:45:53.694Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T12:45:53.695Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T12:45:53.695Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T12:45:53.696Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:45:54.317Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:46:54.345Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:47:14.370Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:47:34.378Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T12:47:50.044Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T12:47:53.566Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T12:47:53.568Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T12:47:53.568Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T12:47:53.568Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:47:54.543Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T12:48:32.170Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T12:48:34.566Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T12:48:34.567Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T12:48:34.568Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T12:48:34.568Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:48:35.307Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T12:48:59.822Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T12:49:04.082Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T12:49:04.083Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T12:49:04.083Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T12:49:04.083Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:49:04.749Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:50:04.786Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:50:24.812Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:50:44.822Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:51:04.832Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:51:24.842Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T12:51:41.232Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T12:51:42.121Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T12:51:42.122Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T12:51:42.123Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T12:51:42.123Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:51:42.746Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:52:42.785Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:53:02.819Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T12:53:04.940Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T12:53:05.992Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T12:53:05.993Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T12:53:05.994Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T12:53:05.994Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:53:06.865Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:54:06.902Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T12:54:07.310Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T12:54:15.431Z"}
+{"level":"info","message":"History batch - Chats: 117, Contacts: 298, Messages: 171","timestamp":"2025-08-29T12:54:17.702Z"}
+{"level":"info","message":"Bulk history sync complete","timestamp":"2025-08-29T12:54:17.702Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T12:54:20.443Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 4, Messages: 4911","timestamp":"2025-08-29T12:54:26.446Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 4970","timestamp":"2025-08-29T12:54:37.155Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 5, Messages: 4935","timestamp":"2025-08-29T12:54:50.453Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 5002","timestamp":"2025-08-29T12:55:00.517Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4944","timestamp":"2025-08-29T12:55:10.572Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 5, Messages: 4966","timestamp":"2025-08-29T12:55:20.294Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4953","timestamp":"2025-08-29T12:55:29.937Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 4, Messages: 4957","timestamp":"2025-08-29T12:55:38.048Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 7, Messages: 4977","timestamp":"2025-08-29T12:55:45.548Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 4984","timestamp":"2025-08-29T12:55:52.879Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 9, Messages: 4959","timestamp":"2025-08-29T12:55:59.938Z"}
+{"level":"info","message":"History batch - Chats: 25, Contacts: 22, Messages: 4988","timestamp":"2025-08-29T12:56:08.814Z"}
+{"level":"info","message":"History batch - Chats: 7, Contacts: 9, Messages: 4968","timestamp":"2025-08-29T12:56:16.124Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 5, Messages: 4971","timestamp":"2025-08-29T12:56:22.703Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 7, Messages: 4976","timestamp":"2025-08-29T12:56:29.359Z"}
+{"level":"info","message":"History batch - Chats: 4, Contacts: 8, Messages: 4970","timestamp":"2025-08-29T12:56:35.551Z"}
+{"level":"info","message":"History batch - Chats: 32, Contacts: 16, Messages: 4946","timestamp":"2025-08-29T12:56:41.778Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 612","timestamp":"2025-08-29T12:56:41.994Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T12:58:19.370Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T12:58:20.680Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T12:58:20.681Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T12:58:20.682Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T12:58:20.682Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T12:58:21.993Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T12:58:22.880Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T12:58:29.204Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T12:58:29.205Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T12:58:29.205Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T12:58:29.205Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:58:29.774Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:59:29.805Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T12:59:49.842Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:00:09.879Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:00:29.900Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:00:49.920Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T13:01:09.938Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:01:15.916Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T13:02:01.275Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T13:02:02.340Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T13:02:02.343Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T13:02:02.344Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T13:02:02.345Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:02:03.309Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:03:03.348Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:03:23.371Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:03:43.388Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:04:03.411Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:04:23.423Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T13:04:43.434Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:04:49.161Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:05:49.179Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:06:09.196Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:06:29.216Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T13:06:39.050Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T13:06:55.121Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T13:07:00.152Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T13:07:05.167Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T13:07:10.187Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T13:07:15.196Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T13:07:20.211Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T13:07:25.227Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T13:07:30.240Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T13:07:35.256Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T13:07:40.270Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T13:07:42.623Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T13:07:43.485Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T13:07:43.486Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T13:07:43.487Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T13:07:43.487Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T13:07:43.536Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:07:49.396Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T13:07:50.349Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T13:08:35.064Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T13:08:35.065Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T13:08:35.066Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T13:08:35.066Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:08:35.841Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T13:09:09.353Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T13:09:16.229Z"}
+{"level":"info","message":"History batch - Chats: 117, Contacts: 298, Messages: 171","timestamp":"2025-08-29T13:09:18.691Z"}
+{"level":"info","message":"Bulk history sync complete","timestamp":"2025-08-29T13:09:18.691Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T13:09:21.238Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 4, Messages: 4911","timestamp":"2025-08-29T13:09:23.446Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 4970","timestamp":"2025-08-29T13:09:26.466Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 5, Messages: 4935","timestamp":"2025-08-29T13:09:29.448Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 1, Messages: 59","timestamp":"2025-08-29T13:09:31.899Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 4944","timestamp":"2025-08-29T13:09:32.258Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4944","timestamp":"2025-08-29T13:09:35.264Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 5, Messages: 4966","timestamp":"2025-08-29T13:09:38.608Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4953","timestamp":"2025-08-29T13:09:41.787Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 4, Messages: 4957","timestamp":"2025-08-29T13:09:45.221Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 7, Messages: 4977","timestamp":"2025-08-29T13:09:47.553Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 4984","timestamp":"2025-08-29T13:09:58.028Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 0","timestamp":"2025-08-29T13:10:00.724Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 9, Messages: 4959","timestamp":"2025-08-29T13:10:09.492Z"}
+{"level":"info","message":"History batch - Chats: 25, Contacts: 22, Messages: 4988","timestamp":"2025-08-29T13:10:19.903Z"}
+{"level":"info","message":"History batch - Chats: 7, Contacts: 9, Messages: 4968","timestamp":"2025-08-29T13:10:30.030Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 5, Messages: 4971","timestamp":"2025-08-29T13:10:38.752Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 7, Messages: 4976","timestamp":"2025-08-29T13:10:49.107Z"}
+{"level":"info","message":"History batch - Chats: 4, Contacts: 8, Messages: 4970","timestamp":"2025-08-29T13:10:56.609Z"}
+{"level":"info","message":"History batch - Chats: 32, Contacts: 16, Messages: 4946","timestamp":"2025-08-29T13:11:05.057Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 612","timestamp":"2025-08-29T13:11:05.232Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T13:13:23.767Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T13:13:25.965Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T13:13:25.966Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T13:13:25.966Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T13:13:25.966Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T13:13:26.859Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T13:13:31.862Z"}
+{"level":"info","message":"Loading chat history for 393347766369@s.whatsapp.net, limit: 15","timestamp":"2025-08-29T13:13:44.051Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T13:14:29.561Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T13:14:38.453Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T13:14:38.454Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T13:14:38.455Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T13:14:38.455Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:14:40.103Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T13:14:50.759Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T13:14:57.426Z"}
+{"level":"info","message":"History batch - Chats: 117, Contacts: 298, Messages: 171","timestamp":"2025-08-29T13:15:00.268Z"}
+{"level":"info","message":"Bulk history sync complete","timestamp":"2025-08-29T13:15:00.269Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T13:15:02.433Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 4, Messages: 4911","timestamp":"2025-08-29T13:15:04.755Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 4970","timestamp":"2025-08-29T13:15:07.629Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 5, Messages: 4935","timestamp":"2025-08-29T13:15:10.721Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 5004","timestamp":"2025-08-29T13:15:13.791Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4944","timestamp":"2025-08-29T13:15:15.973Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 5, Messages: 4966","timestamp":"2025-08-29T13:15:19.343Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4953","timestamp":"2025-08-29T13:15:23.113Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 4, Messages: 4957","timestamp":"2025-08-29T13:15:24.737Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 7, Messages: 4977","timestamp":"2025-08-29T13:15:27.433Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 4984","timestamp":"2025-08-29T13:15:30.362Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 9, Messages: 4959","timestamp":"2025-08-29T13:15:39.829Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 6, Messages: 0","timestamp":"2025-08-29T13:15:41.287Z"}
+{"level":"info","message":"History batch - Chats: 25, Contacts: 22, Messages: 4988","timestamp":"2025-08-29T13:15:51.622Z"}
+{"level":"info","message":"History batch - Chats: 7, Contacts: 9, Messages: 4968","timestamp":"2025-08-29T13:16:01.567Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 5, Messages: 4971","timestamp":"2025-08-29T13:16:09.014Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 7, Messages: 4976","timestamp":"2025-08-29T13:16:17.151Z"}
+{"level":"info","message":"History batch - Chats: 4, Contacts: 8, Messages: 4970","timestamp":"2025-08-29T13:16:25.683Z"}
+{"level":"info","message":"History batch - Chats: 32, Contacts: 16, Messages: 4946","timestamp":"2025-08-29T13:16:32.673Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 612","timestamp":"2025-08-29T13:16:33.044Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T13:21:26.098Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T13:21:27.012Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T13:21:27.013Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T13:21:27.013Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T13:21:27.013Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T13:21:28.077Z"}
+{"level":"info","message":"Loading chat history for 393347766369@s.whatsapp.net, limit: 15","timestamp":"2025-08-29T13:21:31.326Z"}
+{"level":"info","message":"Loading chat history for 393347766369@s.whatsapp.net, limit: 15","timestamp":"2025-08-29T13:21:32.722Z"}
+{"level":"info","message":"Loading chat history for 393347766369@s.whatsapp.net, limit: 15","timestamp":"2025-08-29T13:21:32.907Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T13:21:33.087Z"}
+{"level":"info","message":"Loading chat history for 393347766369@s.whatsapp.net, limit: 15","timestamp":"2025-08-29T13:21:33.132Z"}
+{"level":"info","message":"Loading chat history for 393347766369@s.whatsapp.net, limit: 15","timestamp":"2025-08-29T13:21:33.514Z"}
+{"level":"info","message":"Loading chat history for 393347766369@s.whatsapp.net, limit: 15","timestamp":"2025-08-29T13:21:33.846Z"}
+{"level":"info","message":"Connection closed. Should reconnect: false","timestamp":"2025-08-29T13:21:40.403Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T13:21:47.410Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T13:21:48.289Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T13:21:48.290Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T13:21:48.291Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T13:21:48.291Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:21:48.873Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T13:22:07.705Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T13:22:14.238Z"}
+{"level":"info","message":"History batch - Chats: 117, Contacts: 298, Messages: 171","timestamp":"2025-08-29T13:22:16.490Z"}
+{"level":"info","message":"Bulk history sync complete","timestamp":"2025-08-29T13:22:16.491Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T13:22:19.241Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 4, Messages: 4911","timestamp":"2025-08-29T13:22:23.569Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 4970","timestamp":"2025-08-29T13:22:24.038Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 5, Messages: 4935","timestamp":"2025-08-29T13:22:27.268Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 1, Messages: 61","timestamp":"2025-08-29T13:22:29.526Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 4944","timestamp":"2025-08-29T13:22:30.084Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4944","timestamp":"2025-08-29T13:22:33.260Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 5, Messages: 4966","timestamp":"2025-08-29T13:22:37.809Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4953","timestamp":"2025-08-29T13:22:39.754Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 4, Messages: 4957","timestamp":"2025-08-29T13:22:42.440Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 7, Messages: 4977","timestamp":"2025-08-29T13:22:46.287Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 4984","timestamp":"2025-08-29T13:22:55.513Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 0","timestamp":"2025-08-29T13:22:57.486Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 9, Messages: 4959","timestamp":"2025-08-29T13:23:06.086Z"}
+{"level":"info","message":"History batch - Chats: 25, Contacts: 22, Messages: 4988","timestamp":"2025-08-29T13:23:16.297Z"}
+{"level":"info","message":"History batch - Chats: 7, Contacts: 9, Messages: 4968","timestamp":"2025-08-29T13:23:24.656Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 5, Messages: 4971","timestamp":"2025-08-29T13:23:32.688Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 7, Messages: 4976","timestamp":"2025-08-29T13:23:41.382Z"}
+{"level":"info","message":"History batch - Chats: 4, Contacts: 8, Messages: 4970","timestamp":"2025-08-29T13:23:49.589Z"}
+{"level":"info","message":"History batch - Chats: 32, Contacts: 16, Messages: 5558","timestamp":"2025-08-29T13:23:58.052Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T13:24:59.459Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T13:25:00.715Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T13:25:00.717Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T13:25:00.717Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T13:25:00.717Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T13:25:01.658Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T13:25:06.661Z"}
+{"level":"info","message":"Loading chat history for 393347766369@s.whatsapp.net, limit: 15","timestamp":"2025-08-29T13:25:12.576Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T13:25:54.257Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T13:25:55.385Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T13:25:55.387Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T13:25:55.388Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T13:25:55.388Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T13:25:56.490Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T13:26:01.495Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T13:26:04.599Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T13:26:05.758Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T13:26:05.759Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T13:26:05.759Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T13:26:05.760Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:26:06.813Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T13:26:14.188Z"}
+{"level":"info","message":"Connection closed. Should reconnect: false","timestamp":"2025-08-29T13:26:20.418Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T13:26:41.791Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T13:26:44.943Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T13:26:44.944Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T13:26:44.945Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T13:26:44.945Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:26:45.740Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T13:27:43.694Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T13:27:50.901Z"}
+{"level":"info","message":"History batch - Chats: 117, Contacts: 298, Messages: 171","timestamp":"2025-08-29T13:27:54.105Z"}
+{"level":"info","message":"Bulk history sync complete","timestamp":"2025-08-29T13:27:54.106Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T13:27:55.903Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 4, Messages: 4911","timestamp":"2025-08-29T13:27:57.710Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 4970","timestamp":"2025-08-29T13:28:00.358Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 5, Messages: 4935","timestamp":"2025-08-29T13:28:03.069Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 1, Messages: 61","timestamp":"2025-08-29T13:28:05.776Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 4944","timestamp":"2025-08-29T13:28:06.242Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4944","timestamp":"2025-08-29T13:28:09.201Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 5, Messages: 4966","timestamp":"2025-08-29T13:28:12.690Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4953","timestamp":"2025-08-29T13:28:16.124Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 4, Messages: 4957","timestamp":"2025-08-29T13:28:18.427Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 7, Messages: 4977","timestamp":"2025-08-29T13:28:21.436Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 4984","timestamp":"2025-08-29T13:28:29.554Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 0","timestamp":"2025-08-29T13:28:33.503Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 9, Messages: 4959","timestamp":"2025-08-29T13:28:41.707Z"}
+{"level":"info","message":"History batch - Chats: 25, Contacts: 22, Messages: 4988","timestamp":"2025-08-29T13:28:52.633Z"}
+{"level":"info","message":"History batch - Chats: 7, Contacts: 9, Messages: 4968","timestamp":"2025-08-29T13:29:00.283Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 5, Messages: 4971","timestamp":"2025-08-29T13:29:08.487Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 7, Messages: 4976","timestamp":"2025-08-29T13:29:17.067Z"}
+{"level":"info","message":"History batch - Chats: 4, Contacts: 8, Messages: 4970","timestamp":"2025-08-29T13:29:25.050Z"}
+{"level":"info","message":"History batch - Chats: 32, Contacts: 16, Messages: 4946","timestamp":"2025-08-29T13:29:32.161Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 612","timestamp":"2025-08-29T13:29:32.754Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T13:30:14.006Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T13:30:17.548Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T13:30:17.550Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T13:30:17.550Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T13:30:17.550Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T13:30:20.385Z"}
+{"level":"info","message":"Loading chat history for 393347766369@s.whatsapp.net, limit: 15","timestamp":"2025-08-29T13:30:21.065Z"}
+{"level":"info","message":"Loading chat history for 393347766369@s.whatsapp.net, limit: 15","timestamp":"2025-08-29T13:30:21.732Z"}
+{"level":"info","message":"Loading chat history for 393347766369@s.whatsapp.net, limit: 15","timestamp":"2025-08-29T13:30:22.002Z"}
+{"level":"info","message":"Loading chat history for 393347766369@s.whatsapp.net, limit: 15","timestamp":"2025-08-29T13:30:22.472Z"}
+{"level":"info","message":"Loading chat history for 393347766369@s.whatsapp.net, limit: 15","timestamp":"2025-08-29T13:30:22.745Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T13:30:25.401Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T13:31:15.198Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T13:31:46.368Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T13:31:46.369Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T13:31:46.369Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T13:31:46.370Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T13:31:47.630Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T13:31:52.640Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T13:32:03.751Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T13:32:05.633Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T13:32:05.634Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T13:32:05.634Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T13:32:05.635Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T13:32:06.553Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T13:32:29.229Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T13:32:36.240Z"}
+{"level":"info","message":"History batch - Chats: 117, Contacts: 298, Messages: 171","timestamp":"2025-08-29T13:32:40.659Z"}
+{"level":"info","message":"Bulk history sync complete","timestamp":"2025-08-29T13:32:40.659Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T13:32:41.255Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 4, Messages: 4911","timestamp":"2025-08-29T13:32:45.575Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 4970","timestamp":"2025-08-29T13:32:46.348Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 5, Messages: 4935","timestamp":"2025-08-29T13:32:49.814Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 1, Messages: 61","timestamp":"2025-08-29T13:32:51.820Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 4944","timestamp":"2025-08-29T13:32:52.109Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4944","timestamp":"2025-08-29T13:32:55.235Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 5, Messages: 4966","timestamp":"2025-08-29T13:32:58.520Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4953","timestamp":"2025-08-29T13:33:01.202Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 4, Messages: 4957","timestamp":"2025-08-29T13:33:04.033Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 7, Messages: 4977","timestamp":"2025-08-29T13:33:07.036Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 4984","timestamp":"2025-08-29T13:33:14.092Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 0","timestamp":"2025-08-29T13:33:19.713Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 9, Messages: 4959","timestamp":"2025-08-29T13:33:28.626Z"}
+{"level":"info","message":"History batch - Chats: 25, Contacts: 22, Messages: 4988","timestamp":"2025-08-29T13:33:38.058Z"}
+{"level":"info","message":"History batch - Chats: 7, Contacts: 9, Messages: 4968","timestamp":"2025-08-29T13:33:48.259Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 5, Messages: 4971","timestamp":"2025-08-29T13:33:54.753Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 7, Messages: 4976","timestamp":"2025-08-29T13:34:02.913Z"}
+{"level":"info","message":"History batch - Chats: 4, Contacts: 8, Messages: 4970","timestamp":"2025-08-29T13:34:10.502Z"}
+{"level":"info","message":"History batch - Chats: 32, Contacts: 16, Messages: 4946","timestamp":"2025-08-29T13:34:18.176Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 611","timestamp":"2025-08-29T13:34:18.469Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T13:39:23.143Z"}
+{"level":"error","message":"Connection with persistence error: initializeDatabase is not defined","stack":"ReferenceError: initializeDatabase is not defined\n    at connectWithPersistence (C:\\Users\\Davide\\Desktop\\WhatsAppWml\\serverWml.js:1197:5)\n    at Object.<anonymous> (C:\\Users\\Davide\\Desktop\\WhatsAppWml\\serverWml.js:1193:1)\n    at Module._compile (node:internal/modules/cjs/loader:1241:14)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1295:10)\n    at Module.load (node:internal/modules/cjs/loader:1091:32)\n    at Module._load (node:internal/modules/cjs/loader:938:12)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:83:12)\n    at node:internal/main/run_main_module:23:47","timestamp":"2025-08-29T13:46:03.403Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T13:46:03.407Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T13:46:03.408Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T13:46:03.408Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T13:46:03.408Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T13:46:09.017Z"}
+{"level":"error","message":"Connection with persistence error: initializeDatabase is not defined","stack":"ReferenceError: initializeDatabase is not defined\n    at connectWithPersistence (C:\\Users\\Davide\\Desktop\\WhatsAppWml\\serverWml.js:1197:5)\n    at Object.<anonymous> (C:\\Users\\Davide\\Desktop\\WhatsAppWml\\serverWml.js:1193:1)\n    at Module._compile (node:internal/modules/cjs/loader:1241:14)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1295:10)\n    at Module.load (node:internal/modules/cjs/loader:1091:32)\n    at Module._load (node:internal/modules/cjs/loader:938:12)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:83:12)\n    at node:internal/main/run_main_module:23:47","timestamp":"2025-08-29T13:46:11.241Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T13:46:11.245Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T13:46:11.245Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T13:46:11.245Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T13:46:11.245Z"}
+{"level":"error","message":"Connection with persistence error: initializeDatabase is not defined","stack":"ReferenceError: initializeDatabase is not defined\n    at Timeout.connectWithPersistence [as _onTimeout] (C:\\Users\\Davide\\Desktop\\WhatsAppWml\\serverWml.js:1197:5)\n    at listOnTimeout (node:internal/timers:573:17)\n    at process.processTimers (node:internal/timers:514:7)","timestamp":"2025-08-29T13:46:21.253Z"}
+{"level":"error","message":"Connection with persistence error: initializeDatabase is not defined","stack":"ReferenceError: initializeDatabase is not defined\n    at Timeout.connectWithPersistence [as _onTimeout] (C:\\Users\\Davide\\Desktop\\WhatsAppWml\\serverWml.js:1197:5)\n    at listOnTimeout (node:internal/timers:573:17)\n    at process.processTimers (node:internal/timers:514:7)","timestamp":"2025-08-29T13:46:31.264Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T13:46:38.767Z"}
+{"level":"error","message":"Connection with persistence error: initializeDatabase is not defined","stack":"ReferenceError: initializeDatabase is not defined\n    at connectWithPersistence (C:\\Users\\Davide\\Desktop\\WhatsAppWml\\serverWml.js:1197:5)\n    at Object.<anonymous> (C:\\Users\\Davide\\Desktop\\WhatsAppWml\\serverWml.js:1193:1)\n    at Module._compile (node:internal/modules/cjs/loader:1241:14)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1295:10)\n    at Module.load (node:internal/modules/cjs/loader:1091:32)\n    at Module._load (node:internal/modules/cjs/loader:938:12)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:83:12)\n    at node:internal/main/run_main_module:23:47","timestamp":"2025-08-29T13:46:39.979Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T13:46:39.984Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T13:46:39.985Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T13:46:39.985Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T13:46:39.985Z"}
+{"level":"error","message":"Connection with persistence error: initializeDatabase is not defined","stack":"ReferenceError: initializeDatabase is not defined\n    at Timeout.connectWithPersistence [as _onTimeout] (C:\\Users\\Davide\\Desktop\\WhatsAppWml\\serverWml.js:1197:5)\n    at listOnTimeout (node:internal/timers:573:17)\n    at process.processTimers (node:internal/timers:514:7)","timestamp":"2025-08-29T13:46:49.987Z"}
+{"level":"error","message":"Connection with persistence error: initializeDatabase is not defined","stack":"ReferenceError: initializeDatabase is not defined\n    at Timeout.connectWithPersistence [as _onTimeout] (C:\\Users\\Davide\\Desktop\\WhatsAppWml\\serverWml.js:1197:5)\n    at listOnTimeout (node:internal/timers:573:17)\n    at process.processTimers (node:internal/timers:514:7)","timestamp":"2025-08-29T13:46:59.993Z"}
+{"level":"error","message":"Connection with persistence error: initializeDatabase is not defined","stack":"ReferenceError: initializeDatabase is not defined\n    at Timeout.connectWithPersistence [as _onTimeout] (C:\\Users\\Davide\\Desktop\\WhatsAppWml\\serverWml.js:1197:5)\n    at listOnTimeout (node:internal/timers:573:17)\n    at process.processTimers (node:internal/timers:514:7)","timestamp":"2025-08-29T13:47:09.995Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T13:47:13.867Z"}
+{"level":"error","message":"Uncaught Exception: initializeDatabase is not defined","stack":"ReferenceError: initializeDatabase is not defined\n    at Object.<anonymous> (C:\\Users\\Davide\\Desktop\\WhatsAppWml\\serverWml.js:1402:1)\n    at Module._compile (node:internal/modules/cjs/loader:1241:14)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1295:10)\n    at Module.load (node:internal/modules/cjs/loader:1091:32)\n    at Module._load (node:internal/modules/cjs/loader:938:12)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:83:12)\n    at node:internal/main/run_main_module:23:47","timestamp":"2025-08-29T14:01:43.579Z"}
+{"level":"error","message":"Uncaught Exception: initializeDatabase is not defined","stack":"ReferenceError: initializeDatabase is not defined\n    at Object.<anonymous> (C:\\Users\\Davide\\Desktop\\WhatsAppWml\\serverWml.js:1402:1)\n    at Module._compile (node:internal/modules/cjs/loader:1241:14)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1295:10)\n    at Module.load (node:internal/modules/cjs/loader:1091:32)\n    at Module._load (node:internal/modules/cjs/loader:938:12)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:83:12)\n    at node:internal/main/run_main_module:23:47","timestamp":"2025-08-29T14:01:45.920Z"}
+{"level":"error","message":"Uncaught Exception: initializeDatabase is not defined","stack":"ReferenceError: initializeDatabase is not defined\n    at Object.<anonymous> (C:\\Users\\Davide\\Desktop\\WhatsAppWml\\serverWml.js:1402:1)\n    at Module._compile (node:internal/modules/cjs/loader:1241:14)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1295:10)\n    at Module.load (node:internal/modules/cjs/loader:1091:32)\n    at Module._load (node:internal/modules/cjs/loader:938:12)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:83:12)\n    at node:internal/main/run_main_module:23:47","timestamp":"2025-08-29T14:01:55.938Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T14:02:53.590Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T14:02:53.591Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T14:02:53.592Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T14:02:53.592Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T14:03:03.081Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T14:03:03.985Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T14:03:03.986Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T14:03:03.986Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T14:03:03.986Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T14:03:04.735Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T14:03:24.594Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T14:03:31.133Z"}
+{"level":"info","message":"History batch - Chats: 117, Contacts: 298, Messages: 171","timestamp":"2025-08-29T14:03:34.444Z"}
+{"level":"info","message":"Bulk history sync complete","timestamp":"2025-08-29T14:03:34.445Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T14:03:36.141Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 4, Messages: 4911","timestamp":"2025-08-29T14:03:40.586Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 4970","timestamp":"2025-08-29T14:03:42.763Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 5, Messages: 4935","timestamp":"2025-08-29T14:03:46.197Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 4963","timestamp":"2025-08-29T14:03:50.153Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4943","timestamp":"2025-08-29T14:03:54.025Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 5, Messages: 4967","timestamp":"2025-08-29T14:03:58.754Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4952","timestamp":"2025-08-29T14:04:02.103Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 4, Messages: 4957","timestamp":"2025-08-29T14:04:09.368Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 4, Messages: 0","timestamp":"2025-08-29T14:04:15.890Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 7, Messages: 4977","timestamp":"2025-08-29T14:04:24.330Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 4985","timestamp":"2025-08-29T14:04:34.285Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 9, Messages: 4958","timestamp":"2025-08-29T14:04:46.758Z"}
+{"level":"info","message":"History batch - Chats: 25, Contacts: 22, Messages: 4988","timestamp":"2025-08-29T14:04:53.347Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T14:04:54.944Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T14:04:55.910Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T14:04:55.911Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T14:04:55.911Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T14:04:55.911Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T14:04:57.662Z"}
+{"level":"info","message":"Loading chat history for 393347766369@s.whatsapp.net, limit: 30","timestamp":"2025-08-29T14:05:02.391Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T14:05:02.668Z"}
+{"level":"info","message":"History batch - Chats: 23, Contacts: 23, Messages: 4970","timestamp":"2025-08-29T14:05:03.940Z"}
+{"level":"info","message":"History batch - Chats: 7, Contacts: 10, Messages: 4972","timestamp":"2025-08-29T14:05:12.028Z"}
+{"level":"info","message":"History batch - Chats: 4, Contacts: 7, Messages: 4977","timestamp":"2025-08-29T14:05:20.687Z"}
+{"level":"info","message":"History batch - Chats: 10, Contacts: 13, Messages: 4972","timestamp":"2025-08-29T14:05:28.994Z"}
+{"level":"info","message":"History batch - Chats: 33, Contacts: 36, Messages: 4947","timestamp":"2025-08-29T14:05:37.041Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 652","timestamp":"2025-08-29T14:05:37.327Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T14:06:59.706Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T14:23:44.297Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T14:23:44.299Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T14:23:44.299Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T14:23:44.299Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T14:23:44.935Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T14:24:09.800Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T14:24:16.675Z"}
+{"level":"info","message":"History batch - Chats: 117, Contacts: 298, Messages: 171","timestamp":"2025-08-29T14:24:20.793Z"}
+{"level":"info","message":"Bulk history sync complete","timestamp":"2025-08-29T14:24:20.793Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T14:24:21.681Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 4, Messages: 4911","timestamp":"2025-08-29T14:24:25.278Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 4970","timestamp":"2025-08-29T14:24:28.692Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 5, Messages: 4935","timestamp":"2025-08-29T14:24:31.725Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 4963","timestamp":"2025-08-29T14:24:35.408Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4943","timestamp":"2025-08-29T14:24:38.079Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 5, Messages: 4967","timestamp":"2025-08-29T14:24:41.379Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4952","timestamp":"2025-08-29T14:24:44.512Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 4, Messages: 4957","timestamp":"2025-08-29T14:24:47.325Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 7, Messages: 4977","timestamp":"2025-08-29T14:24:55.395Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 4985","timestamp":"2025-08-29T14:25:04.540Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 9, Messages: 4958","timestamp":"2025-08-29T14:25:11.220Z"}
+{"level":"info","message":"History batch - Chats: 25, Contacts: 22, Messages: 4988","timestamp":"2025-08-29T14:25:19.044Z"}
+{"level":"info","message":"History batch - Chats: 7, Contacts: 9, Messages: 4968","timestamp":"2025-08-29T14:25:26.362Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 5, Messages: 4971","timestamp":"2025-08-29T14:25:33.731Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4976","timestamp":"2025-08-29T14:25:40.681Z"}
+{"level":"info","message":"History batch - Chats: 6, Contacts: 8, Messages: 4970","timestamp":"2025-08-29T14:25:47.654Z"}
+{"level":"info","message":"History batch - Chats: 32, Contacts: 16, Messages: 4947","timestamp":"2025-08-29T14:25:52.523Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 644","timestamp":"2025-08-29T14:25:52.740Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T14:31:12.568Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T14:31:14.138Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T14:31:14.139Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T14:31:14.139Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T14:31:14.139Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T14:31:15.703Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T14:31:20.714Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T14:31:42.576Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T14:31:43.747Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T14:31:43.748Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T14:31:43.748Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T14:31:43.748Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T14:31:44.922Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T14:31:49.934Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T14:32:10.822Z"}
+{"level":"info","message":"WhatsApp WML Gateway started on port 3000","timestamp":"2025-08-29T14:32:39.572Z"}
+{"level":"info","message":"Environment: development","timestamp":"2025-08-29T14:32:39.573Z"}
+{"level":"info","message":"WML endpoints available at /wml/","timestamp":"2025-08-29T14:32:39.574Z"}
+{"level":"info","message":"API endpoints available at /api/","timestamp":"2025-08-29T14:32:39.574Z"}
+{"level":"info","message":"QR Code generated","timestamp":"2025-08-29T14:32:40.425Z"}
+{"level":"info","message":"Connection closed. Should reconnect: true","timestamp":"2025-08-29T14:32:43.154Z"}
+{"level":"info","message":"WhatsApp connected successfully!","timestamp":"2025-08-29T14:32:50.161Z"}
+{"level":"info","message":"History batch - Chats: 117, Contacts: 298, Messages: 171","timestamp":"2025-08-29T14:32:54.153Z"}
+{"level":"info","message":"Bulk history sync complete","timestamp":"2025-08-29T14:32:54.154Z"}
+{"level":"error","message":"Unhandled Rejection at:","timestamp":"2025-08-29T14:32:55.169Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 4, Messages: 4911","timestamp":"2025-08-29T14:32:58.179Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 4970","timestamp":"2025-08-29T14:33:00.835Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 5, Messages: 4935","timestamp":"2025-08-29T14:33:04.570Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 1, Messages: 19","timestamp":"2025-08-29T14:33:07.387Z"}
+{"level":"info","message":"History batch - Chats: 1, Contacts: 3, Messages: 4944","timestamp":"2025-08-29T14:33:07.910Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4943","timestamp":"2025-08-29T14:33:11.989Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 5, Messages: 4967","timestamp":"2025-08-29T14:33:15.465Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4952","timestamp":"2025-08-29T14:33:18.941Z"}
+{"level":"info","message":"History batch - Chats: 5, Contacts: 4, Messages: 4957","timestamp":"2025-08-29T14:33:22.510Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 7, Messages: 4977","timestamp":"2025-08-29T14:33:33.052Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 4985","timestamp":"2025-08-29T14:33:43.533Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 9, Messages: 4958","timestamp":"2025-08-29T14:33:54.116Z"}
+{"level":"info","message":"History batch - Chats: 25, Contacts: 22, Messages: 4988","timestamp":"2025-08-29T14:34:05.386Z"}
+{"level":"info","message":"History batch - Chats: 7, Contacts: 9, Messages: 4968","timestamp":"2025-08-29T14:34:16.004Z"}
+{"level":"info","message":"History batch - Chats: 2, Contacts: 5, Messages: 4971","timestamp":"2025-08-29T14:34:26.249Z"}
+{"level":"info","message":"History batch - Chats: 3, Contacts: 7, Messages: 4976","timestamp":"2025-08-29T14:34:36.335Z"}
+{"level":"info","message":"History batch - Chats: 6, Contacts: 8, Messages: 4970","timestamp":"2025-08-29T14:34:45.608Z"}
+{"level":"info","message":"History batch - Chats: 32, Contacts: 16, Messages: 4947","timestamp":"2025-08-29T14:34:54.244Z"}
+{"level":"info","message":"History batch - Chats: 0, Contacts: 2, Messages: 644","timestamp":"2025-08-29T14:34:54.464Z"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2025-08-29T14:39:41.965Z"}
