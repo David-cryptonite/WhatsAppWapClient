@@ -12,9 +12,10 @@ const winston = require('winston')
 const { enhancedInitialSync } = require("./loadChatUtils")
 const PersistentStorage = require("./persistentStorage")
 
+const iconv = require('iconv-lite');
 
 const app = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3500
 const isDev = process.env.NODE_ENV !== 'production'
 let sock = null 
 // Production middleware
@@ -575,23 +576,27 @@ app.get("/api/qr/wml-wbmp", (req, res) => {
 
 
 // Enhanced Contacts with search and pagination
+
 app.get('/wml/contacts.wml', (req, res) => {
   const userAgent = req.headers['user-agent'] || ''
   
-  const page = Math.max(1, parseInt(req.query.page || '1'))
+  // Usa req.query per GET. Se il form usa POST, i dati sarebbero in req.body.
+  // La <go> con method="get" mette i dati in query string.
+  const query = req.query;
+
+  const page = Math.max(1, parseInt(query.page || '1'))
+  let limit = Math.max(1, Math.min(20, parseInt(query.limit || '10')))
   
-  // Adatta il limite in base al dispositivo
-  let limit = Math.max(1, Math.min(20, parseInt(req.query.limit || '10')))
+  // Limiti più restrittivi per dispositivi WAP 1.0
+  if (userAgent.includes('Nokia') || userAgent.includes('UP.Browser')) {
+    limit = Math.min(5, limit) // Max 5 elementi per pagina
+  }
   
-  
-  const search = req.query.q || ''
+  const search = query.q || ''
   
   let contacts = Array.from(contactStore.values())
   
-  // Limita il numero totale di contatti per dispositivi Nokia vecchi
-
-  
-  // Apply search filter
+  // Applica filtro di ricerca
   if (search) {
     const searchLower = search.toLowerCase()
     contacts = contacts.filter(c => {
@@ -605,57 +610,104 @@ app.get('/wml/contacts.wml', (req, res) => {
   const start = (page - 1) * limit
   const items = contacts.slice(start, start + limit)
 
+  // Funzione di escaping sicura per WML
+  const escWml = text => (text || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
 
-    // Versione completa per dispositivi moderni
-    const searchForm = search ? 
-      `<p><b>Search Results for:</b> ${esc(search)} (${total} found)</p>` :
-      `<p><b>All Contacts</b> (${total} total)</p>`
-
-    const list = items.map((c, idx) => {
-      const name = c.name || c.notify || c.verifiedName || 'Unknown'
-      const jid = c.id
-      const number = jidFriendly(jid)
-      return `<p><b>${start + idx + 1}.</b> ${esc(name)}<br/>
-        <small>${esc(number)}</small><br/>
-        <a href="/wml/contact.wml?jid=${encodeURIComponent(jid)}">[View]</a> |
-        <a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;limit=15">[Chat]</a> |
-        <a href="wtai://wp/mc;${number}">[Call]</a> |
-        <a href="wtai://wp/ms;${number};">[SMS]</a><br/>
-      </p>`
-    }).join('') || '<p>No contacts found.</p>'
-
-    // Pagination
-    const prevPage = page > 1 ? `<a href="/wml/contacts.wml?page=${page - 1}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}" accesskey="2">[2] Prev</a>` : ''
-    const nextPage = start + limit < total ? `<a href="/wml/contacts.wml?page=${page + 1}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}" accesskey="3">[3] Next</a>` : ''
-    const pagination = `<p>${prevPage} ${prevPage && nextPage ? '|' : ''} ${nextPage}</p>`
-
-    const body = `
-      <timer value="120"/>
-      ${searchForm}
-      
-      ${searchBox('/wml/contacts.wml', 'Search contacts...')}
-      
-      <p><b>Page ${page}/${Math.ceil(total/limit) || 1}</b></p>
-      ${list}
-      ${pagination}
-      
-      <p>
-        <a href="/wml/contacts.search.wml" accesskey="1">[1] Advanced Search</a>
-        ${prevPage ? ' | ' + prevPage : ''}
-        ${nextPage ? ' | ' + nextPage : ''}
-      </p>
-      
-      ${navigationBar()}
-      
-      <do type="accept" label="Refresh">
-        <go href="/wml/contacts.wml?page=${page}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}"/>
-      </do>
-    `
-    
-    sendWml(res, card('contacts', 'Contacts', body))
+  // Header della pagina
+  const searchHeader = search ? 
+    `<p><b>Risultati per:</b> ${escWml(search)} (${total})</p>` :
+    `<p><b>Tutti i contatti</b> (${total})</p>`
   
-})
+  // Lista contatti
+  const list = items.map((c, idx) => {
+    const name = c.name || c.notify || c.verifiedName || 'Sconosciuto'
+    const jid = c.id
+    const number = jidFriendly(jid)
+    return `<p>${start + idx + 1}. ${escWml(name)}<br/>
+      <small>${escWml(number)}</small><br/>
+      <a href="/wml/contact.wml?jid=${encodeURIComponent(jid)}">[Dettagli]</a> |
+      <a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;limit=10">[Chat]</a></p>`
+  }).join('') || '<p>Nessun contatto trovato.</p>'
+  
+  // Paginazione
+  const prevPage = page > 1 ? 
+    `<a href="/wml/contacts.wml?page=${page - 1}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}">[Precedente]</a>` : ''
+  
+  const nextPage = start + limit < total ? 
+    `<a href="/wml/contacts.wml?page=${page + 1}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}">[Successivo]</a>` : ''
+  
+  const pagination = `<p>${prevPage} ${prevPage && nextPage ? '|' : ''} ${nextPage}</p>`
+  
+  // Form di ricerca semplificato
+  const searchForm = `
+    <p><b>Cerca contatti:</b></p>
+    <p>
+      <input name="q" title="Cerca..." value="${escWml(search)}" emptyok="true" size="15" maxlength="30"/>
+      <do type="accept" label="Cerca">
+        <go href="/wml/contacts.wml" method="get">
+          <postfield name="q" value="$(q)"/>
+          <postfield name="page" value="1"/>
+          <postfield name="limit" value="${limit}"/>
+        </go>
+      </do>
+    </p>`
+  
+  // Corpo della card WML
+  const body = `
+    <p><b>Contatti - Pagina ${page}/${Math.ceil(total/limit) || 1}</b></p>
+    ${searchHeader}
+    ${searchForm}
+    ${list}
+    ${pagination}
+    <p>
+      <a href="/wml/home.wml">[Home]</a> |
+      <a href="/wml/chats.wml">[Chat]</a>
+    </p>
+    <do type="accept" label="Aggiorna">
+      <go href="/wml/contacts.wml?page=${page}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}"/>
+    </do>
+    <do type="options" label="Menu">
+      <go href="/wml/menu.wml"/>
+    </do>`
 
+  // Crea la stringa WML completa
+  const wmlOutput = `<?xml version="1.0"?>
+<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN" "http://www.wapforum.org/DTD/wml_1.1.xml">
+<wml>
+  <head>
+    <meta http-equiv="Cache-Control" content="max-age=0"/>
+  </head>
+  <card id="contacts" title="Contatti">
+    ${body}
+  </card>
+</wml>`;
+  
+  // --- MODIFICHE CHIAVE PER LA COMPATIBILITÀ ---
+  
+  // 1. Imposta gli header per WAP 1.0 con la codifica corretta (ISO-8859-1)
+  res.setHeader('Content-Type', 'text/vnd.wap.wml; charset=iso-8859-1');
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  
+  // 2. Codifica l'intera stringa WML in un buffer ISO-8859-1
+  const encodedBuffer = iconv.encode(wmlOutput, 'iso-8859-1');
+  
+  // 3. Invia il buffer codificato
+  res.send(encodedBuffer);
+});
+
+// Aggiungi un listener per poter eseguire il server
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server WAP in ascolto su http://localhost:${PORT}`);
+  console.log(`Accedi a http://localhost:${PORT}/wml/contacts.wml per testare.`);
+});
 // Enhanced Contact Detail page with WTAI integration
 app.get('/wml/contact.wml', async (req, res) => {
   try {
@@ -713,13 +765,25 @@ app.get('/wml/contact.wml', async (req, res) => {
   }
 })
 app.get('/wml/chat.wml', async (req, res) => {
-  const raw = req.query.jid || ''
-  const jid = formatJid(raw)
-  const limit = 10
-  const offset = Math.max(0, parseInt(req.query.offset || '0'))
-  const search = (req.query.search || '').trim().toLowerCase()
+  const userAgent = req.headers['user-agent'] || ''
   
-  // Carica cronologia se mancante
+  // Use req.query for GET requests, like in contacts and chats
+  const query = req.query;
+  
+  const raw = query.jid || ''
+  const jid = formatJid(raw)
+  
+  const page = Math.max(1, parseInt(query.page || '1'))
+  let limit = Math.max(1, Math.min(20, parseInt(query.limit || '10')))
+  
+  // More restrictive limits for WAP 1.0 devices
+  if (userAgent.includes('Nokia') || userAgent.includes('UP.Browser')) {
+    limit = Math.min(5, limit) // Max 5 messages per page
+  }
+  
+  const search = query.q || ''
+  
+  // Load chat history if missing
   if ((!chatStore.get(jid) || chatStore.get(jid).length === 0) && sock) {
     try {
       await loadChatHistory(jid, limit * 5)
@@ -729,148 +793,182 @@ app.get('/wml/chat.wml', async (req, res) => {
   }
   
   let allMessages = (chatStore.get(jid) || []).slice()
-  // Ordinamento decrescente (dal più recente al più vecchio)
-  allMessages.sort((a, b) => Number(b.messageTimestamp) - Number(a.messageTimestamp))
   
-  // Applica filtro di ricerca se presente
+  // Sort by timestamp - MOST RECENT FIRST (descending order)
+  // Handle different timestamp formats and ensure proper sorting
+  allMessages.sort((a, b) => {
+    // Get timestamps - could be in seconds or milliseconds
+    let tsA = Number(a.messageTimestamp) || 0
+    let tsB = Number(b.messageTimestamp) || 0
+    
+    // If timestamp is in seconds (< year 2000 when converted), convert to milliseconds
+    if (tsA > 0 && tsA < 946684800000) tsA *= 1000
+    if (tsB > 0 && tsB < 946684800000) tsB *= 1000
+    
+    // Most recent first (higher timestamp = more recent)
+    return tsB - tsA
+  })
+  
+  // Apply search filter if present
   if (search) {
-    allMessages = allMessages.filter(m => (messageText(m) || '').toLowerCase().includes(search))
+    const searchLower = search.toLowerCase()
+    allMessages = allMessages.filter(m => (messageText(m) || '').toLowerCase().includes(searchLower))
   }
   
-  const totalMessages = allMessages.length
-  const slice = allMessages.slice(offset, offset + limit)
+  const total = allMessages.length
+  const start = (page - 1) * limit
+  const items = allMessages.slice(start, start + limit)
+  
   const contact = contactStore.get(jid)
   const chatName = contact?.name || contact?.notify || contact?.verifiedName || jidFriendly(jid)
   const number = jidFriendly(jid)
+  const isGroup = jid.endsWith('@g.us')
   
-  // Improved escaping function (preserves UTF-8)
+  // Safe WML escaping function (like contacts)
   const escWml = text => (text || '')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
   
-  // Improved truncation function
+  // Enhanced truncation function
   const truncate = (text, maxLength) => {
     if (!text) return ''
     if (text.length <= maxLength) return text
     return text.substring(0, maxLength - 3) + '...'
   }
   
-  // Enhanced timestamp formatting
-  const formatTimestamp = (timestamp) => {
-    const date = new Date(Number(timestamp) * 1000)
-    const now = new Date()
+  // Enhanced timestamp formatting - handle WhatsApp timestamp format
+  const formatMessageTimestamp = (timestamp) => {
+    // Handle both string and number timestamps
+    let ts = typeof timestamp === 'string' ? parseInt(timestamp) : Number(timestamp)
+    
+    // WhatsApp usually uses seconds, convert to milliseconds if needed
+    if (ts > 0 && ts < 946684800000) { // If less than year 2000 in ms, it's in seconds
+      ts *= 1000
+    }
+    
+    const date = new Date(ts)
+    
+    // Check if date is valid
+    if (isNaN(date.getTime())) {
+      return 'Invalid date'
+    }
     
     const timeStr = date.toLocaleTimeString('en-GB', {
       hour: '2-digit', 
       minute: '2-digit'
     })
     
-    // Show date for messages older than today
-    if (date.toDateString() !== now.toDateString()) {
-      const dateStr = date.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'short'
-      })
-      return `${dateStr} ${timeStr}`
-    }
+    const dateStr = date.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    })
     
-    return timeStr
+    return `${dateStr} ${timeStr}`
   }
   
+  // Page header
+  const searchHeader = search ? 
+    `<p><b>Search Results for:</b> ${escWml(search)} (${total} found)</p>` :
+    `<p><b>Recent Messages</b> (${total} total, newest first)</p>`
+  
+  // Message list - MOST RECENT MESSAGE FIRST
   let messageList
-  if (slice.length === 0) {
-    messageList = `<p>No messages found.</p>
-      <p>
-        <a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}" accesskey="2">[Clear Search]</a> |
-        <a href="/wml/chats.wml" accesskey="0">[Back to Chats]</a>
-      </p>`
+  if (items.length === 0) {
+    messageList = `<p>No messages found.</p>`
   } else {
-    messageList = slice.map((m, idx) => {
-      const who = m.key.fromMe ? 'Me' : chatName
-      const text = truncate(messageText(m), 100)
-      const ts = formatTimestamp(m.messageTimestamp)
+    messageList = items.map((m, idx) => {
+      const who = m.key.fromMe ? 'Me' : (isGroup ? (m.pushName || 'Unknown') : chatName)
+      const text = truncate(messageText(m), 80)
+      const messageDateTime = formatMessageTimestamp(m.messageTimestamp) // Show actual message date/time
       const mid = m.key.id
-      const msgNumber = totalMessages - (offset + idx) // numerazione decrescente
       
-      // Visual indicators for recent messages
-      const isVeryRecent = msgNumber <= 3
-      const isRecent = msgNumber <= 10
-      const indicator = isVeryRecent ? '🔥' : isRecent ? '📌' : ''
+      // Message numbering: 1 = most recent, 2 = second most recent, etc.
+      const msgNumber = idx + 1
       
-      // Better access key distribution
-      const actionKeys = ['1','2','3','4','5','6','7','8','9','0','#','*']
-      const accessKey = actionKeys[idx % actionKeys.length]
+      // Visual indicators for message types and recency
+      const typeIndicator = m.key.fromMe ? '[OUT]' : '[IN]'
+      const isVeryRecent = idx < 3 // First 3 messages (most recent) get fire indicator
+      const recentIndicator = isVeryRecent ? '🔥' : ''
       
-      return `<p>${indicator}<b>${msgNumber}. ${escWml(who)}</b> (${ts})<br/>
-        ${escWml(text)}<br/>
-        <a href="/wml/msg.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}" accesskey="${accessKey}">[Actions]</a>
+      // Debug info (you can remove this later)
+      const debugTs = `<!-- TS: ${m.messageTimestamp} -->`
+      
+      return `<p>${recentIndicator}<b>${msgNumber}. ${typeIndicator} ${escWml(who)}</b><br/>
+        <small><b>Time:</b> ${messageDateTime}</small><br/>
+        <small><b>Text:</b> ${escWml(text)}</small><br/>
+        <a href="/wml/msg.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[Details]</a> |
+        <a href="/wml/send.text.wml?to=${encodeURIComponent(jid)}&amp;reply=${encodeURIComponent(mid)}">[Reply]</a>
+        ${debugTs}
       </p>`
     }).join('')
   }
   
-  // Navigazione
-  const olderOffset = offset + limit
-  const olderLink = olderOffset < totalMessages
-    ? `<a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;offset=${olderOffset}&amp;search=${encodeURIComponent(search)}" accesskey="2">[2] Older</a>` : ''
+  // Pagination
+  const prevPage = page > 1 ? 
+    `<a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;page=${page - 1}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}">[Previous]</a>` : ''
   
-  const newerOffset = Math.max(0, offset - limit)
-  const newerLink = offset > 0
-    ? `<a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;offset=${newerOffset}&amp;search=${encodeURIComponent(search)}" accesskey="3">[3] Newer</a>` : ''
+  const nextPage = start + limit < total ? 
+    `<a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;page=${page + 1}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}">[Next]</a>` : ''
   
+  const pagination = `<p>${prevPage} ${prevPage && nextPage ? '|' : ''} ${nextPage}</p>`
+  
+  // Simplified search form (like contacts)
   const searchForm = `
-    <p><b>Search Messages:</b></p>
+    <p><b>Search messages:</b></p>
     <p>
-      <input name="searchQuery" title="Search..." value="${escWml(search)}" size="15" maxlength="50"/>
+      <input name="q" title="Search..." value="${escWml(search)}" emptyok="true" size="15" maxlength="50"/>
       <do type="accept" label="Search">
         <go href="/wml/chat.wml" method="get">
           <postfield name="jid" value="${escWml(jid)}"/>
-          <postfield name="search" value="$(searchQuery)"/>
-          <postfield name="offset" value="0"/>
+          <postfield name="q" value="$(q)"/>
+          <postfield name="page" value="1"/>
+          <postfield name="limit" value="${limit}"/>
         </go>
       </do>
-    </p>
-    ${search ? `<p>Searching: <b>${escWml(search)}</b> | <a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}">[Clear]</a></p>` : ''}
-  `
+    </p>`
   
-  const paginationInfo = `
-    <p><b>Messages ${offset + 1}-${Math.min(offset + limit, totalMessages)} of ${totalMessages}</b></p>
-    <p>Page ${Math.floor(offset / limit) + 1}/${Math.ceil(totalMessages / limit)}</p>
-  `
+  // Chat info section
+  const chatInfo = `
+    <p><b>${escWml(chatName)}</b> ${isGroup ? '[GROUP]' : '[CHAT]'}</p>
+    <p>${escWml(number)} | Total: ${total} messages</p>`
   
-  const body = `
-    <p><b>${escWml(chatName)}</b></p>
-    <p>${escWml(number)} | Total: ${totalMessages} messages</p>
-    ${searchForm}
-    ${paginationInfo}
-    ${messageList}
-    <p><b>Navigation:</b></p>
-    <p>${olderLink} ${olderLink && newerLink ? ' | ' : ''} ${newerLink}</p>
+  // Quick actions section
+  const quickActions = `
     <p><b>Quick Actions:</b></p>
     <p>
-      <a href="/wml/send.text.wml?to=${encodeURIComponent(jid)}" accesskey="1">[1] Send Text</a> |
-      <a href="/wml/contact.wml?jid=${encodeURIComponent(jid)}" accesskey="4">[4] Contact Info</a>
-      ${number && !jid.endsWith('@g.us') ? ` | <a href="wtai://wp/mc;${number}" accesskey="9">[9] Call</a>` : ''}
-    </p>
+      <a href="/wml/send.text.wml?to=${encodeURIComponent(jid)}">[Send Message]</a> |
+      <a href="/wml/contact.wml?jid=${encodeURIComponent(jid)}">[Contact Info]</a>
+      ${number && !isGroup ? ` | <a href="wtai://wp/mc;${number}">[Call]</a>` : ''}
+      ${number && !isGroup ? ` | <a href="wtai://wp/ms;${number};">[SMS]</a>` : ''}
+    </p>`
+  
+  // WML card body
+  const body = `
+    <p><b>Chat - Page ${page}/${Math.ceil(total/limit) || 1}</b></p>
+    ${chatInfo}
+    ${searchForm}
+    ${searchHeader}
+    ${messageList}
+    ${pagination}
+    ${quickActions}
     <p>
-      <a href="/wml/chats.wml" accesskey="0">[0] Back to Chats</a> |
-      <a href="/wml/home.wml" accesskey="*">[*] Home</a>
+      <a href="/wml/chats.wml">[Back to Chats]</a> |
+      <a href="/wml/home.wml">[Home]</a>
     </p>
     <do type="accept" label="Send">
       <go href="/wml/send.text.wml?to=${encodeURIComponent(jid)}"/>
     </do>
-    <do type="options" label="Refresh">
-      <go href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;offset=${offset}&amp;search=${encodeURIComponent(search)}"/>
+    <do type="options" label="Menu">
+      <go href="/wml/menu.wml"/>
     </do>
   `
   
-  res.setHeader('Content-Type', 'text/vnd.wap.wml; charset=UTF-8')
-  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
-  res.setHeader('Pragma', 'no-cache')
-  res.setHeader('Expires', '0')
-  
-  res.send(`<?xml version="1.0"?>
+  // Create complete WML string
+  const wmlOutput = `<?xml version="1.0"?>
 <!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN" "http://www.wapforum.org/DTD/wml_1.1.xml">
 <wml>
   <head>
@@ -879,10 +977,22 @@ app.get('/wml/chat.wml', async (req, res) => {
   <card id="chat" title="${escWml(chatName)}">
     ${body}
   </card>
-</wml>`)
-})
-
-
+</wml>`;
+  
+  // --- KEY MODIFICATIONS FOR COMPATIBILITY (like contacts and chats) ---
+  
+  // 1. Set headers for WAP 1.0 with correct encoding (ISO-8859-1)
+  res.setHeader('Content-Type', 'text/vnd.wap.wml; charset=iso-8859-1');
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  
+  // 2. Encode the entire WML string to ISO-8859-1 buffer
+  const encodedBuffer = iconv.encode(wmlOutput, 'iso-8859-1');
+  
+  // 3. Send the encoded buffer
+  res.send(encodedBuffer);
+});
 
 // Enhanced Message Actions page
 app.get('/wml/msg.wml', (req, res) => {
@@ -3711,21 +3821,21 @@ app.get('/wml/sync.contacts.wml', async (req, res) => {
 // Enhanced Chats page with search and pagination
 app.get('/wml/chats.wml', async (req, res) => {
   const userAgent = req.headers['user-agent'] || ''
-  const isOldNokia = /Nokia|Series40|MAUI|UP\.Browser/i.test(userAgent)
   
-  const page = Math.max(1, parseInt(req.query.page || '1'))
+  // Use req.query for GET requests, like in contacts
+  const query = req.query;
+
+  const page = Math.max(1, parseInt(query.page || '1'))
+  let limit = Math.max(1, Math.min(20, parseInt(query.limit || '10')))
   
-  // Adapt limit based on device
-  let limit
-  if (isOldNokia) {
-    limit = 3 // Old Nokia: max 3 chats per page
-  } else {
-    limit = Math.max(1, Math.min(20, parseInt(req.query.limit || '10')))
+  // More restrictive limits for WAP 1.0 devices (like contacts)
+  if (userAgent.includes('Nokia') || userAgent.includes('UP.Browser')) {
+    limit = Math.min(5, limit) // Max 5 items per page
   }
   
-  const search = req.query.q || ''
-  const showGroups = req.query.groups !== '0' // Default show groups
-  const showDirect = req.query.direct !== '0' // Default show direct chats
+  const search = query.q || ''
+  const showGroups = query.groups !== '0' // Default show groups
+  const showDirect = query.direct !== '0' // Default show direct chats
   
   // Auto-sync if no chats and not synced yet
   if (chatStore.size === 0 && !isFullySynced && sock) {
@@ -3792,7 +3902,7 @@ app.get('/wml/chats.wml', async (req, res) => {
     chats = chats.filter(c => c.isGroup)
   }
   
-  // Apply search filter
+  // Apply search filter (like contacts)
   if (search) {
     const searchLower = search.toLowerCase()
     chats = chats.filter(c => {
@@ -3810,124 +3920,124 @@ app.get('/wml/chats.wml', async (req, res) => {
   const start = (page - 1) * limit
   const items = chats.slice(start, start + limit)
   
-  if (isOldNokia) {
-    // Simplified version for old Nokia devices
-    const searchForm = search ? 
-      `<p>Search: ${esc(search)} (${total})</p>` :
-      `<p>Chats (${total})</p>`
+  // Safe WML escaping function (like contacts)
+  const escWml = text => (text || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
 
-    const list = items.map((c, idx) => {
-      const shortName = c.name.length > 15 ? c.name.substring(0, 12) + '...' : c.name
-      const shortMessage = c.lastMessage.text.length > 20 ? c.lastMessage.text.substring(0, 17) + '...' : c.lastMessage.text
-      const typeIndicator = c.isGroup ? '[G]' : '[P]'
-      
-      return `<p>${start + idx + 1}. ${typeIndicator} ${esc(shortName)}<br/>
-        ${esc(shortMessage)}<br/>
-        <a href="/wml/chat.wml?jid=${encodeURIComponent(c.id)}">[Open]</a></p>`
-    }).join('') || '<p>No chats found</p>'
+  // Page header
+  const searchHeader = search ? 
+    `<p><b>Search Results for:</b> ${escWml(search)} (${total})</p>` :
+    `<p><b>All Chats</b> (${total})</p>`
 
-    // Simple navigation
-    const prevPage = page > 1 ? 
-      `<p><a href="/wml/chats.wml?page=${page - 1}" accesskey="2">2-Prev</a></p>` : ''
-    const nextPage = start + limit < total ? 
-      `<p><a href="/wml/chats.wml?page=${page + 1}" accesskey="3">3-Next</a></p>` : ''
-
-    const body = `
-      ${searchForm}
-      <p>Page ${page}/${Math.ceil(total/limit) || 1}</p>
-      ${list}
-      ${prevPage}
-      ${nextPage}
-      <p><a href="/wml/home.wml" accesskey="0">0-Home</a></p>
-    `
+  // Chat list
+  const list = items.map((c, idx) => {
+    const typeIcon = c.isGroup ? '[GROUP]' : '[CHAT]'
+    const unreadBadge = c.unreadCount > 0 ? ` (${c.unreadCount})` : ''
+    const messagePreview = c.lastMessage.text.length > 40 ? 
+      c.lastMessage.text.substring(0, 37) + '...' : c.lastMessage.text
+    const fromIndicator = c.lastMessage.fromMe ? 'You: ' : ''
     
-    // Legacy WML 1.1 for Nokia compatibility
-    const legacyCard = `<card id="chats" title="Chats">${body}</card>`
-    const legacyDoc = `<?xml version="1.0"?>
+    return `<p>${start + idx + 1}. ${typeIcon} ${escWml(c.name)}${unreadBadge}<br/>
+      <small>${escWml(fromIndicator + messagePreview)}</small><br/>
+      <small>${c.lastMessage.timeStr} | ${c.messageCount} msgs</small><br/>
+      <a href="/wml/chat.wml?jid=${encodeURIComponent(c.id)}&amp;limit=15">[Details]</a> |
+      <a href="/wml/send.text.wml?to=${encodeURIComponent(c.id)}">[Send]</a>
+      ${c.phoneNumber ? ` | <a href="wtai://wp/mc;${c.phoneNumber}">[Call]</a>` : ''}
+      ${c.phoneNumber ? ` | <a href="wtai://wp/ms;${c.phoneNumber};">[SMS]</a>` : ''}
+    </p>`
+  }).join('') || '<p>No chats found.</p>'
+  
+  // Pagination
+  const prevPage = page > 1 ? 
+    `<a href="/wml/chats.wml?page=${page - 1}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}&amp;groups=${showGroups ? 1 : 0}&amp;direct=${showDirect ? 1 : 0}">[Previous]</a>` : ''
+  
+  const nextPage = start + limit < total ? 
+    `<a href="/wml/chats.wml?page=${page + 1}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}&amp;groups=${showGroups ? 1 : 0}&amp;direct=${showDirect ? 1 : 0}">[Next]</a>` : ''
+  
+  const pagination = `<p>${prevPage} ${prevPage && nextPage ? '|' : ''} ${nextPage}</p>`
+  
+  // Simplified search form (like contacts)
+  const searchForm = `
+    <p><b>Search chats:</b></p>
+    <p>
+      <input name="q" title="Search..." value="${escWml(search)}" emptyok="true" size="15" maxlength="30"/>
+      <input name="groups" type="checkbox" title="Groups" value="1" ${showGroups ? 'checked="true"' : ''}/>Groups
+      <input name="direct" type="checkbox" title="Direct" value="1" ${showDirect ? 'checked="true"' : ''}/>Direct
+      <do type="accept" label="Search">
+        <go href="/wml/chats.wml" method="get">
+          <postfield name="q" value="$(q)"/>
+          <postfield name="groups" value="$(groups)"/>
+          <postfield name="direct" value="$(direct)"/>
+          <postfield name="page" value="1"/>
+          <postfield name="limit" value="${limit}"/>
+        </go>
+      </do>
+    </p>`
+  
+  // Filter toggles (simplified)
+  const filterToggles = `
+    <p><b>Quick Filters:</b></p>
+    <p>
+      ${showGroups ? 
+        `<a href="/wml/chats.wml?page=${page}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}&amp;groups=0&amp;direct=${showDirect ? 1 : 0}">[Hide Groups]</a>` :
+        `<a href="/wml/chats.wml?page=${page}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}&amp;groups=1&amp;direct=${showDirect ? 1 : 0}">[Show Groups]</a>`
+      } |
+      ${showDirect ? 
+        `<a href="/wml/chats.wml?page=${page}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}&amp;groups=${showGroups ? 1 : 0}&amp;direct=0">[Hide Direct]</a>` :
+        `<a href="/wml/chats.wml?page=${page}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}&amp;groups=${showGroups ? 1 : 0}&amp;direct=1">[Show Direct]</a>`
+      }
+    </p>`
+
+  // WML card body
+  const body = `
+    <p><b>Chats - Page ${page}/${Math.ceil(total/limit) || 1}</b></p>
+    ${searchHeader}
+    ${searchForm}
+    ${filterToggles}
+    ${list}
+    ${pagination}
+    <p>
+      <a href="/wml/home.wml">[Home]</a> |
+      <a href="/wml/contacts.wml">[Contacts]</a> |
+      <a href="/wml/send-menu.wml">[New Message]</a>
+    </p>
+    <do type="accept" label="Refresh">
+      <go href="/wml/chats.wml?page=${page}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}&amp;groups=${showGroups ? 1 : 0}&amp;direct=${showDirect ? 1 : 0}"/>
+    </do>
+    <do type="options" label="Menu">
+      <go href="/wml/menu.wml"/>
+    </do>`
+
+  // Create complete WML string
+  const wmlOutput = `<?xml version="1.0"?>
 <!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN" "http://www.wapforum.org/DTD/wml_1.1.xml">
 <wml>
-<head><meta http-equiv="Cache-Control" content="max-age=0"/></head>
-${legacyCard}
-</wml>`
-    
-    res.setHeader('Content-Type', 'text/vnd.wap.wml; charset=ISO-8859-1')
-    res.setHeader('Cache-Control', 'no-cache')
-    res.send(legacyDoc)
-    
-  } else {
-    // Full version for modern devices
-    const searchForm = search ? 
-      `<p><b>Search Results for:</b> ${esc(search)} (${total} found)</p>` :
-      `<p><b>All Chats</b> (${total} total)</p>`
-
-    const list = items.map((c, idx) => {
-      const typeIcon = c.isGroup ? '[GROUP]' : '[CHAT]'
-      const unreadBadge = c.unreadCount > 0 ? ` (${c.unreadCount})` : ''
-      const messagePreview = truncate(c.lastMessage.text, 60)
-      const fromIndicator = c.lastMessage.fromMe ? 'You: ' : ''
-      
-      return `<p><b>${start + idx + 1}.</b> ${typeIcon} ${esc(c.name)}${unreadBadge}<br/>
-        <small>${esc(fromIndicator + messagePreview)}</small><br/>
-        <small>${c.lastMessage.timeStr} | ${c.messageCount} msgs</small><br/>
-        <a href="/wml/chat.wml?jid=${encodeURIComponent(c.id)}&amp;limit=15" accesskey="${Math.min(idx + 1, 9)}">[${Math.min(idx + 1, 9)}] Open</a> |
-        <a href="/wml/send.text.wml?to=${encodeURIComponent(c.id)}">[Send]</a>
-        ${c.phoneNumber ? ` | <a href="wtai://wp/mc;${c.phoneNumber}">[Call]</a>` : ''}
-                <a href="wtai://wp/ms;${c.phoneNumber};">[SMS]</a><br/>
-
-      </p>`
-    }).join('') || '<p>No chats found.</p>'
-
-    // Pagination
-    const prevPage = page > 1 ? 
-      `<a href="/wml/chats.wml?page=${page - 1}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}&amp;groups=${showGroups ? 1 : 0}&amp;direct=${showDirect ? 1 : 0}" accesskey="2">[2] Prev</a>` : ''
-    const nextPage = start + limit < total ? 
-      `<a href="/wml/chats.wml?page=${page + 1}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}&amp;groups=${showGroups ? 1 : 0}&amp;direct=${showDirect ? 1 : 0}" accesskey="3">[3] Next</a>` : ''
-    const pagination = `<p>${prevPage} ${prevPage && nextPage ? '|' : ''} ${nextPage}</p>`
-
-    // Filter toggles
-    const groupToggle = showGroups ? 
-      `<a href="/wml/chats.wml?page=${page}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}&amp;groups=0&amp;direct=${showDirect ? 1 : 0}">[Hide Groups]</a>` :
-      `<a href="/wml/chats.wml?page=${page}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}&amp;groups=1&amp;direct=${showDirect ? 1 : 0}">[Show Groups]</a>`
-    
-    const directToggle = showDirect ? 
-      `<a href="/wml/chats.wml?page=${page}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}&amp;groups=${showGroups ? 1 : 0}&amp;direct=0">[Hide Direct]</a>` :
-      `<a href="/wml/chats.wml?page=${page}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}&amp;groups=${showGroups ? 1 : 0}&amp;direct=1">[Show Direct]</a>`
-
-    const body = `
-      <timer value="120"/>
-      ${searchForm}
-      
-      ${searchBox('/wml/chats.wml', 'Search chats...')}
-      
-      <p><b>Filters:</b> ${groupToggle} | ${directToggle}</p>
-      
-      <p><b>Page ${page}/${Math.ceil(total/limit) || 1}</b></p>
-      ${list}
-      ${pagination}
-      
-      <p><b>Quick Actions:</b></p>
-      <p>
-        <a href="/wml/chats.search.wml" accesskey="1">[1] Advanced Search</a>
-        ${prevPage ? ' | ' + prevPage : ''}
-        ${nextPage ? ' | ' + nextPage : ''}
-      </p>
-      
-      <p><b>Chat Management:</b></p>
-      <p>
-        <a href="/wml/groups.wml" accesskey="*">[*] Manage Groups</a> |
-        <a href="/wml/send-menu.wml" accesskey="#">[#] New Message</a>
-      </p>
-      
-      ${navigationBar()}
-      
-      <do type="accept" label="Refresh">
-        <go href="/wml/chats.wml?page=${page}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}&amp;groups=${showGroups ? 1 : 0}&amp;direct=${showDirect ? 1 : 0}"/>
-      </do>
-    `
-    
-    sendWml(res, card('chats', 'Chats', body))
-  }
-})
+  <head>
+    <meta http-equiv="Cache-Control" content="max-age=0"/>
+  </head>
+  <card id="chats" title="Chats">
+    ${body}
+  </card>
+</wml>`;
+  
+  // --- KEY MODIFICATIONS FOR COMPATIBILITY (like contacts) ---
+  
+  // 1. Set headers for WAP 1.0 with correct encoding (ISO-8859-1)
+  res.setHeader('Content-Type', 'text/vnd.wap.wml; charset=iso-8859-1');
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  
+  // 2. Encode the entire WML string to ISO-8859-1 buffer
+  const encodedBuffer = iconv.encode(wmlOutput, 'iso-8859-1');
+  
+  // 3. Send the encoded buffer
+  res.send(encodedBuffer);
+});
 
 // Advanced chat search page
 app.get('/wml/chats.search.wml', (req, res) => {
