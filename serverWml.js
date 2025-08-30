@@ -322,7 +322,7 @@ app.get(['/wml', '/wml/home.wml'], (req, res) => {
   sendWml(res, card('home', 'WhatsApp API', body, '/wml/home.wml'), scripts)
 })
 
-
+/*
 app.get('/wml/chat.wml', async (req, res) => {
   const raw = req.query.jid || ''
   const jid = formatJid(raw)
@@ -473,7 +473,7 @@ app.get('/wml/chat.wml', async (req, res) => {
     ${body}
   </card>
 </wml>`)
-})
+})*/
 
 // Enhanced Status page
 app.get('/wml/status.wml', (req, res) => {
@@ -764,24 +764,359 @@ app.get('/wml/contact.wml', async (req, res) => {
     sendWml(res, resultCard('Error', [e.message || 'Failed to load contact'], '/wml/contacts.wml'))
   }
 })
+/*
 app.get('/wml/chat.wml', async (req, res) => {
   const userAgent = req.headers['user-agent'] || ''
+  const isOldNokia = /Nokia|Series40|MAUI|UP\.Browser/i.test(userAgent)
   
-  // Use req.query for GET requests, like in contacts and chats
-  const query = req.query;
-  
-  const raw = query.jid || ''
+  const raw = req.query.jid || ''
   const jid = formatJid(raw)
+  const offset = Math.max(0, parseInt(req.query.offset || '0'))
+  const search = (req.query.search || '').trim().toLowerCase()
   
-  const page = Math.max(1, parseInt(query.page || '1'))
-  let limit = Math.max(1, Math.min(20, parseInt(query.limit || '10')))
+  // Very small limits for Nokia 7210
+  const limit = isOldNokia ? 3 : 10
   
-  // More restrictive limits for WAP 1.0 devices
-  if (userAgent.includes('Nokia') || userAgent.includes('UP.Browser')) {
-    limit = Math.min(5, limit) // Max 5 messages per page
+  // Load chat history if missing
+  if ((!chatStore.get(jid) || chatStore.get(jid).length === 0) && sock) {
+    try {
+      await loadChatHistory(jid, limit * 3)
+    } catch (e) {
+      logger.warn(`Failed to load chat history for ${jid}: ${e.message}`)
+    }
   }
   
-  const search = query.q || ''
+  let allMessages = (chatStore.get(jid) || []).slice()
+  
+  // Sort by timestamp - MOST RECENT FIRST
+  allMessages.sort((a, b) => {
+    const tsA = Number(a.messageTimestamp) || 0
+    const tsB = Number(b.messageTimestamp) || 0
+    return tsB - tsA // Most recent first
+  })
+  
+  // Apply search filter if present
+  if (search) {
+    allMessages = allMessages.filter(m => (messageText(m) || '').toLowerCase().includes(search))
+  }
+  
+  const total = allMessages.length
+  const items = allMessages.slice(offset, offset + limit)
+  
+  const contact = contactStore.get(jid)
+  const chatName = contact?.name || contact?.notify || contact?.verifiedName || jidFriendly(jid)
+  const number = jidFriendly(jid)
+  const isGroup = jid.endsWith('@g.us')
+  
+  // Simple escaping for Nokia 7210
+  const esc = text => (text || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+  
+  // Simple truncate
+  const truncate = (text, maxLength) => {
+    if (!text) return ''
+    if (text.length <= maxLength) return text
+    return text.substring(0, maxLength - 3) + '...'
+  }
+  
+  // Simple timestamp for Nokia
+  const formatTime = (timestamp) => {
+    const date = new Date(Number(timestamp) * 1000)
+    if (isNaN(date.getTime())) return ''
+    
+    const day = date.getDate().toString().padStart(2, '0')
+    const month = (date.getMonth() + 1).toString().padStart(2, '0')
+    const hours = date.getHours().toString().padStart(2, '0')
+    const mins = date.getMinutes().toString().padStart(2, '0')
+    
+    return `${day}/${month} ${hours}:${mins}`
+  }
+  
+  let messageList = ''
+  
+  if (items.length === 0) {
+    messageList = '<p>No messages</p>'
+  } else {
+    messageList = items.map((m, idx) => {
+      const who = m.key.fromMe ? 'Me' : (chatName.length > 10 ? chatName.substring(0, 10) : chatName)
+      const time = formatTime(m.messageTimestamp)
+      const msgNumber = idx + 1
+      const mid = m.key.id
+      
+      // Handle different message types for Nokia
+      let text = ''
+      let mediaLink = ''
+      
+      if (m.message) {
+        if (m.message.imageMessage) {
+          const img = m.message.imageMessage
+          const size = Math.round((img.fileLength || 0) / 1024)
+          text = `[IMG ${size}KB]`
+          if (img.caption) text += ` ${truncate(img.caption, 30)}`
+          mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View IMG]</a>`
+          
+        } else if (m.message.videoMessage) {
+          const vid = m.message.videoMessage
+          const size = Math.round((vid.fileLength || 0) / 1024)
+          text = `[VID ${size}KB]`
+          if (vid.caption) text += ` ${truncate(vid.caption, 30)}`
+          mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View VID]</a>`
+          
+        } else if (m.message.audioMessage) {
+          const aud = m.message.audioMessage
+          const size = Math.round((aud.fileLength || 0) / 1024)
+          const duration = aud.seconds || 0
+          text = `[AUD ${size}KB ${duration}s]`
+          mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View AUD]</a>`
+          
+        } else if (m.message.documentMessage) {
+          const doc = m.message.documentMessage
+          const size = Math.round((doc.fileLength || 0) / 1024)
+          const filename = doc.fileName || 'file'
+          text = `[DOC ${size}KB] ${truncate(filename, 20)}`
+          mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View DOC]</a>`
+          
+        } else if (m.message.stickerMessage) {
+          text = '[STICKER]'
+          mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View STK]</a>`
+          
+        } else {
+          text = truncate(messageText(m) || '', 50)
+        }
+      } else {
+        text = truncate(messageText(m) || '', 50)
+      }
+      
+      return `<p>${msgNumber}. ${esc(who)} (${time})<br/>${esc(text)}${mediaLink}</p>`
+    }).join('')
+  }
+  
+  // Simple navigation for Nokia
+  const olderOffset = offset + limit
+  const olderLink = olderOffset < total ? 
+    `<p><a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;offset=${olderOffset}&amp;search=${encodeURIComponent(search)}" accesskey="2">2-Older</a></p>` : ''
+  
+  const newerOffset = Math.max(0, offset - limit)
+  const newerLink = offset > 0 ? 
+    `<p><a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;offset=${newerOffset}&amp;search=${encodeURIComponent(search)}" accesskey="3">3-Newer</a></p>` : ''
+  
+  // Simple search for Nokia
+  const searchBox = search ? 
+    `<p>Search: ${esc(search)}</p><p><a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}">Clear</a></p>` : 
+    `<p><a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;search=prompt">Search</a></p>`
+  
+  const body = `<p>${esc(chatName.length > 15 ? chatName.substring(0, 15) : chatName)}</p>
+<p>Msgs ${offset + 1}-${Math.min(offset + limit, total)}/${total}</p>
+${searchBox}
+${messageList}
+${newerLink}
+${olderLink}
+<p><a href="/wml/send.text.wml?to=${encodeURIComponent(jid)}" accesskey="1">1-Send</a></p>
+<p><a href="/wml/chats.wml" accesskey="0">0-Back</a></p>`
+  
+  // Nokia 7210 compatible WML 1.1
+  const wmlOutput = `<?xml version="1.0"?>
+<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN" "http://www.wapforum.org/DTD/wml_1.1.xml">
+<wml>
+<head><meta http-equiv="Cache-Control" content="max-age=0"/></head>
+<card id="chat" title="Chat">
+${body}
+</card>
+</wml>`
+  
+  // Nokia 7210 headers
+  res.setHeader('Content-Type', 'text/vnd.wap.wml; charset=iso-8859-1')
+  res.setHeader('Cache-Control', 'no-cache')
+  res.setHeader('Pragma', 'no-cache')
+  
+  const encodedBuffer = iconv.encode(wmlOutput, 'iso-8859-1')
+  res.send(encodedBuffer)
+})*/
+/*
+// Route per scaricare media - compatibile Nokia 7210
+app.get('/wml/chat.wml', async (req, res) => {
+  const userAgent = req.headers['user-agent'] || ''
+  const isOldNokia = /Nokia|Series40|MAUI|UP\.Browser/i.test(userAgent)
+  
+  const raw = req.query.jid || ''
+  const jid = formatJid(raw)
+  const offset = Math.max(0, parseInt(req.query.offset || '0'))
+  const search = (req.query.search || '').trim().toLowerCase()
+  
+  // Very small limits for Nokia 7210
+  const limit = isOldNokia ? 3 : 10
+  
+  // Load chat history if missing
+  if ((!chatStore.get(jid) || chatStore.get(jid).length === 0) && sock) {
+    try {
+      await loadChatHistory(jid, limit * 3)
+    } catch (e) {
+      logger.warn(`Failed to load chat history for ${jid}: ${e.message}`)
+    }
+  }
+  
+  let allMessages = (chatStore.get(jid) || []).slice()
+  
+  // Sort by timestamp - MOST RECENT FIRST
+  allMessages.sort((a, b) => {
+    const tsA = Number(a.messageTimestamp) || 0
+    const tsB = Number(b.messageTimestamp) || 0
+    return tsB - tsA // Most recent first
+  })
+  
+  // Apply search filter if present
+  if (search) {
+    allMessages = allMessages.filter(m => (messageText(m) || '').toLowerCase().includes(search))
+  }
+  
+  const total = allMessages.length
+  const items = allMessages.slice(offset, offset + limit)
+  
+  const contact = contactStore.get(jid)
+  const chatName = contact?.name || contact?.notify || contact?.verifiedName || jidFriendly(jid)
+  const number = jidFriendly(jid)
+  const isGroup = jid.endsWith('@g.us')
+  
+  // Simple escaping for Nokia 7210
+  const esc = text => (text || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+  
+  // Simple truncate
+  const truncate = (text, maxLength) => {
+    if (!text) return ''
+    if (text.length <= maxLength) return text
+    return text.substring(0, maxLength - 3) + '...'
+  }
+  
+  // Simple timestamp for Nokia
+  const formatTime = (timestamp) => {
+    const date = new Date(Number(timestamp) * 1000)
+    if (isNaN(date.getTime())) return ''
+    
+    const day = date.getDate().toString().padStart(2, '0')
+    const month = (date.getMonth() + 1).toString().padStart(2, '0')
+    const hours = date.getHours().toString().padStart(2, '0')
+    const mins = date.getMinutes().toString().padStart(2, '0')
+    
+    return `${day}/${month} ${hours}:${mins}`
+  }
+  
+  let messageList = ''
+  
+  if (items.length === 0) {
+    messageList = '<p>No messages</p>'
+  } else {
+    messageList = items.map((m, idx) => {
+      const who = m.key.fromMe ? 'Me' : (chatName.length > 10 ? chatName.substring(0, 10) : chatName)
+      const time = formatTime(m.messageTimestamp)
+      const msgNumber = idx + 1
+      const mid = m.key.id
+      
+      // Handle different message types for Nokia
+      let text = ''
+      let mediaLink = ''
+      
+      if (m.message) {
+        if (m.message.imageMessage) {
+          const img = m.message.imageMessage
+          const size = Math.round((img.fileLength || 0) / 1024)
+          text = `[IMG ${size}KB]`
+          if (img.caption) text += ` ${truncate(img.caption, 30)}`
+          mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View IMG]</a>`
+          
+        } else if (m.message.videoMessage) {
+          const vid = m.message.videoMessage
+          const size = Math.round((vid.fileLength || 0) / 1024)
+          text = `[VID ${size}KB]`
+          if (vid.caption) text += ` ${truncate(vid.caption, 30)}`
+          mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View VID]</a>`
+          
+        } else if (m.message.audioMessage) {
+          const aud = m.message.audioMessage
+          const size = Math.round((aud.fileLength || 0) / 1024)
+          const duration = aud.seconds || 0
+          text = `[AUD ${size}KB ${duration}s]`
+          mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View AUD]</a>`
+          
+        } else if (m.message.documentMessage) {
+          const doc = m.message.documentMessage
+          const size = Math.round((doc.fileLength || 0) / 1024)
+          const filename = doc.fileName || 'file'
+          text = `[DOC ${size}KB] ${truncate(filename, 20)}`
+          mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View DOC]</a>`
+          
+        } else if (m.message.stickerMessage) {
+          text = '[STICKER]'
+          mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View STK]</a>`
+          
+        } else {
+          text = truncate(messageText(m) || '', 50)
+        }
+      } else {
+        text = truncate(messageText(m) || '', 50)
+      }
+      
+      return `<p>${msgNumber}. ${esc(who)} (${time})<br/>${esc(text)}${mediaLink}</p>`
+    }).join('')
+  }
+  
+  // Simple navigation for Nokia
+  const olderOffset = offset + limit
+  const olderLink = olderOffset < total ? 
+    `<p><a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;offset=${olderOffset}&amp;search=${encodeURIComponent(search)}" accesskey="2">2-Older</a></p>` : ''
+  
+  const newerOffset = Math.max(0, offset - limit)
+  const newerLink = offset > 0 ? 
+    `<p><a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;offset=${newerOffset}&amp;search=${encodeURIComponent(search)}" accesskey="3">3-Newer</a></p>` : ''
+  
+  // Simple search for Nokia
+  const searchBox = search ? 
+    `<p>Search: ${esc(search)}</p><p><a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}">Clear</a></p>` : 
+    `<p><a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;search=prompt">Search</a></p>`
+  
+  const body = `<p>${esc(chatName.length > 15 ? chatName.substring(0, 15) : chatName)}</p>
+<p>Msgs ${offset + 1}-${Math.min(offset + limit, total)}/${total}</p>
+${searchBox}
+${messageList}
+${newerLink}
+${olderLink}
+<p><a href="/wml/send.text.wml?to=${encodeURIComponent(jid)}" accesskey="1">1-Send</a></p>
+<p><a href="/wml/chats.wml" accesskey="0">0-Back</a></p>`
+  
+  // Nokia 7210 compatible WML 1.1
+  const wmlOutput = `<?xml version="1.0"?>
+<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN" "http://www.wapforum.org/DTD/wml_1.1.xml">
+<wml>
+<head><meta http-equiv="Cache-Control" content="max-age=0"/></head>
+<card id="chat" title="Chat">
+${body}
+</card>
+</wml>`
+  
+  // Nokia 7210 headers
+  res.setHeader('Content-Type', 'text/vnd.wap.wml; charset=iso-8859-1')
+  res.setHeader('Cache-Control', 'no-cache')
+  res.setHeader('Pragma', 'no-cache')
+  
+  const encodedBuffer = iconv.encode(wmlOutput, 'iso-8859-1')
+  res.send(encodedBuffer)
+})*/
+
+app.get('/wml/chat.wml', async (req, res) => {
+  const userAgent = req.headers['user-agent'] || ''
+  const isOldNokia = /Nokia|Series40|MAUI|UP\.Browser/i.test(userAgent)
+  
+  const raw = req.query.jid || ''
+  const jid = formatJid(raw)
+  const offset = Math.max(0, parseInt(req.query.offset || '0'))
+  const search = (req.query.search || '').trim().toLowerCase()
+  
+  // Adaptive limits based on device
+  const limit = isOldNokia ? 3 : 10
   
   // Load chat history if missing
   if ((!chatStore.get(jid) || chatStore.get(jid).length === 0) && sock) {
@@ -795,36 +1130,26 @@ app.get('/wml/chat.wml', async (req, res) => {
   let allMessages = (chatStore.get(jid) || []).slice()
   
   // Sort by timestamp - MOST RECENT FIRST (descending order)
-  // Handle different timestamp formats and ensure proper sorting
   allMessages.sort((a, b) => {
-    // Get timestamps - could be in seconds or milliseconds
-    let tsA = Number(a.messageTimestamp) || 0
-    let tsB = Number(b.messageTimestamp) || 0
-    
-    // If timestamp is in seconds (< year 2000 when converted), convert to milliseconds
-    if (tsA > 0 && tsA < 946684800000) tsA *= 1000
-    if (tsB > 0 && tsB < 946684800000) tsB *= 1000
-    
-    // Most recent first (higher timestamp = more recent)
-    return tsB - tsA
+    const tsA = Number(a.messageTimestamp) || 0
+    const tsB = Number(b.messageTimestamp) || 0
+    return tsB - tsA // Most recent first
   })
   
   // Apply search filter if present
   if (search) {
-    const searchLower = search.toLowerCase()
-    allMessages = allMessages.filter(m => (messageText(m) || '').toLowerCase().includes(searchLower))
+    allMessages = allMessages.filter(m => (messageText(m) || '').toLowerCase().includes(search))
   }
   
-  const total = allMessages.length
-  const start = (page - 1) * limit
-  const items = allMessages.slice(start, start + limit)
+  const totalMessages = allMessages.length
+  const items = allMessages.slice(offset, offset + limit)
   
   const contact = contactStore.get(jid)
   const chatName = contact?.name || contact?.notify || contact?.verifiedName || jidFriendly(jid)
   const number = jidFriendly(jid)
   const isGroup = jid.endsWith('@g.us')
   
-  // Safe WML escaping function (like contacts)
+  // Enhanced escaping that works for both Nokia and modern devices
   const escWml = text => (text || '')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -832,197 +1157,1104 @@ app.get('/wml/chat.wml', async (req, res) => {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;')
   
-  // Enhanced truncation function
+  // Truncation function
   const truncate = (text, maxLength) => {
     if (!text) return ''
     if (text.length <= maxLength) return text
     return text.substring(0, maxLength - 3) + '...'
   }
   
-  // Enhanced timestamp formatting - handle WhatsApp timestamp format
+  // Enhanced timestamp formatting with date and time
   const formatMessageTimestamp = (timestamp) => {
-    // Handle both string and number timestamps
-    let ts = typeof timestamp === 'string' ? parseInt(timestamp) : Number(timestamp)
+    const date = new Date(Number(timestamp) * 1000)
+    if (isNaN(date.getTime())) return 'Invalid date'
     
-    // WhatsApp usually uses seconds, convert to milliseconds if needed
-    if (ts > 0 && ts < 946684800000) { // If less than year 2000 in ms, it's in seconds
-      ts *= 1000
+    if (isOldNokia) {
+      // Simple format for Nokia: dd/mm hh:mm
+      const day = date.getDate().toString().padStart(2, '0')
+      const month = (date.getMonth() + 1).toString().padStart(2, '0')
+      const hours = date.getHours().toString().padStart(2, '0')
+      const mins = date.getMinutes().toString().padStart(2, '0')
+      return `${day}/${month} ${hours}:${mins}`
+    } else {
+      // Full format for modern devices: 30 Dec 2024 14:30
+      const timeStr = date.toLocaleTimeString('en-GB', {
+        hour: '2-digit', 
+        minute: '2-digit'
+      })
+      const dateStr = date.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      })
+      return `${dateStr} ${timeStr}`
     }
-    
-    const date = new Date(ts)
-    
-    // Check if date is valid
-    if (isNaN(date.getTime())) {
-      return 'Invalid date'
-    }
-    
-    const timeStr = date.toLocaleTimeString('en-GB', {
-      hour: '2-digit', 
-      minute: '2-digit'
-    })
-    
-    const dateStr = date.toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
-    })
-    
-    return `${dateStr} ${timeStr}`
   }
   
-  // Page header
-  const searchHeader = search ? 
-    `<p><b>Search Results for:</b> ${escWml(search)} (${total} found)</p>` :
-    `<p><b>Recent Messages</b> (${total} total, newest first)</p>`
+  // Message list with full media support
+  let messageList = ''
   
-  // Message list - MOST RECENT MESSAGE FIRST
-  let messageList
   if (items.length === 0) {
-    messageList = `<p>No messages found.</p>`
+    messageList = '<p>No messages</p>'
   } else {
     messageList = items.map((m, idx) => {
-      const who = m.key.fromMe ? 'Me' : (isGroup ? (m.pushName || 'Unknown') : chatName)
-      const text = truncate(messageText(m), 80)
-      const messageDateTime = formatMessageTimestamp(m.messageTimestamp) // Show actual message date/time
+      const who = m.key.fromMe ? 'Me' : (isOldNokia ? 
+        (chatName.length > 10 ? chatName.substring(0, 10) : chatName) : 
+        (isGroup ? (m.pushName || 'Unknown') : chatName)
+      )
+      const time = formatMessageTimestamp(m.messageTimestamp)
+      const msgNumber = idx + 1 // 1 = most recent
       const mid = m.key.id
       
-      // Message numbering: 1 = most recent, 2 = second most recent, etc.
-      const msgNumber = idx + 1
+      // Handle different message types with full media support
+      let text = ''
+      let mediaLink = ''
       
-      // Visual indicators for message types and recency
-      const typeIndicator = m.key.fromMe ? '[OUT]' : '[IN]'
-      const isVeryRecent = idx < 3 // First 3 messages (most recent) get fire indicator
-      const recentIndicator = isVeryRecent ? '🔥' : ''
+      if (m.message) {
+        if (m.message.imageMessage) {
+          const img = m.message.imageMessage
+          const size = Math.round((img.fileLength || 0) / 1024)
+          text = isOldNokia ? `[IMG ${size}KB]` : `[IMAGE ${size}KB]`
+          if (img.caption) text += ` ${truncate(img.caption, isOldNokia ? 30 : 50)}`
+          
+          if (isOldNokia) {
+            mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View IMG]</a>`
+          } else {
+            mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View Image]</a> | <a href="/wml/media/${encodeURIComponent(mid)}.jpg">[Download]</a>`
+          }
+          
+        } else if (m.message.videoMessage) {
+          const vid = m.message.videoMessage
+          const size = Math.round((vid.fileLength || 0) / 1024)
+          const duration = vid.seconds || 0
+          text = isOldNokia ? `[VID ${size}KB]` : `[VIDEO ${size}KB, ${duration}s]`
+          if (vid.caption) text += ` ${truncate(vid.caption, isOldNokia ? 30 : 50)}`
+          
+          if (isOldNokia) {
+            mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View VID]</a>`
+          } else {
+            mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View Video]</a> | <a href="/wml/media/${encodeURIComponent(mid)}.mp4">[Download]</a>`
+          }
+          
+        } else if (m.message.audioMessage) {
+          const aud = m.message.audioMessage
+          const size = Math.round((aud.fileLength || 0) / 1024)
+          const duration = aud.seconds || 0
+          text = isOldNokia ? `[AUD ${size}KB]` : `[AUDIO ${size}KB, ${duration}s]`
+          
+          if (isOldNokia) {
+            mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View AUD]</a>`
+          } else {
+            mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View Audio]</a> | <a href="/wml/media/${encodeURIComponent(mid)}.wav">[Download]</a>`
+          }
+          
+        } else if (m.message.documentMessage) {
+          const doc = m.message.documentMessage
+          const size = Math.round((doc.fileLength || 0) / 1024)
+          const filename = doc.fileName || 'file'
+          text = isOldNokia ? 
+            `[DOC ${size}KB] ${truncate(filename, 20)}` : 
+            `[DOCUMENT ${size}KB] ${truncate(filename, 40)}`
+          
+          const ext = filename.split('.').pop() || 'bin'
+          if (isOldNokia) {
+            mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View DOC]</a>`
+          } else {
+            mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View Document]</a> | <a href="/wml/media/${encodeURIComponent(mid)}.${ext}">[Download]</a>`
+          }
+          
+        } else if (m.message.stickerMessage) {
+          const sticker = m.message.stickerMessage
+          const size = Math.round((sticker.fileLength || 0) / 1024)
+          text = isOldNokia ? '[STICKER]' : `[STICKER ${size}KB]`
+          
+          if (isOldNokia) {
+            mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View STK]</a>`
+          } else {
+            mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View Sticker]</a> | <a href="/wml/media/${encodeURIComponent(mid)}.webp">[Download]</a>`
+          }
+          
+        } else {
+          text = truncate(messageText(m) || '', isOldNokia ? 50 : 100)
+        }
+      } else {
+        text = truncate(messageText(m) || '', isOldNokia ? 50 : 100)
+      }
       
-      // Debug info (you can remove this later)
-      const debugTs = `<!-- TS: ${m.messageTimestamp} -->`
-      
-      return `<p>${recentIndicator}<b>${msgNumber}. ${typeIndicator} ${escWml(who)}</b><br/>
-        <small><b>Time:</b> ${messageDateTime}</small><br/>
-        <small><b>Text:</b> ${escWml(text)}</small><br/>
-        <a href="/wml/msg.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[Details]</a> |
-        <a href="/wml/send.text.wml?to=${encodeURIComponent(jid)}&amp;reply=${encodeURIComponent(mid)}">[Reply]</a>
-        ${debugTs}
-      </p>`
+      // Format message entry
+      if (isOldNokia) {
+        return `<p>${msgNumber}. ${escWml(who)} (${time})<br/>${escWml(text)}${mediaLink}</p>`
+      } else {
+        const typeIndicator = m.key.fromMe ? '[OUT]' : '[IN]'
+        const isVeryRecent = idx < 3
+        const recentIndicator = isVeryRecent ? '🔥' : ''
+        
+        return `<p>${recentIndicator}<b>${msgNumber}. ${typeIndicator} ${escWml(who)}</b><br/>
+          <small><b>Time:</b> ${time}</small><br/>
+          <small><b>Message:</b> ${escWml(text)}</small>${mediaLink}<br/>
+          <a href="/wml/msg.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[Details]</a> |
+          <a href="/wml/send.text.wml?to=${encodeURIComponent(jid)}&amp;reply=${encodeURIComponent(mid)}">[Reply]</a>
+        </p>`
+      }
     }).join('')
   }
   
-  // Pagination
-  const prevPage = page > 1 ? 
-    `<a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;page=${page - 1}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}">[Previous]</a>` : ''
+  // Navigation adapted to device
+  const olderOffset = offset + limit
+  const olderLink = olderOffset < totalMessages ? 
+    (isOldNokia ? 
+      `<p><a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;offset=${olderOffset}&amp;search=${encodeURIComponent(search)}" accesskey="2">2-Older</a></p>` :
+      `<a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;offset=${olderOffset}&amp;search=${encodeURIComponent(search)}" accesskey="2">[2] Older</a>`
+    ) : ''
   
-  const nextPage = start + limit < total ? 
-    `<a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;page=${page + 1}&amp;limit=${limit}&amp;q=${encodeURIComponent(search)}">[Next]</a>` : ''
+  const newerOffset = Math.max(0, offset - limit)
+  const newerLink = offset > 0 ? 
+    (isOldNokia ?
+      `<p><a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;offset=${newerOffset}&amp;search=${encodeURIComponent(search)}" accesskey="3">3-Newer</a></p>` :
+      `<a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;offset=${newerOffset}&amp;search=${encodeURIComponent(search)}" accesskey="3">[3] Newer</a>`
+    ) : ''
   
-  const pagination = `<p>${prevPage} ${prevPage && nextPage ? '|' : ''} ${nextPage}</p>`
+  // Search form adapted to device capability
+  const searchForm = isOldNokia ? 
+    (search ? 
+      `<p>Search: ${escWml(search)}</p><p><a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}">Clear</a></p>` : 
+      `<p><a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;search=prompt">Search</a></p>`
+    ) : 
+    `<p><b>Search Messages:</b></p>
+     <p>
+       <input name="searchQuery" title="Search..." value="${escWml(search)}" size="15" maxlength="50"/>
+       <do type="accept" label="Search">
+         <go href="/wml/chat.wml" method="get">
+           <postfield name="jid" value="${escWml(jid)}"/>
+           <postfield name="search" value="$(searchQuery)"/>
+           <postfield name="offset" value="0"/>
+         </go>
+       </do>
+     </p>
+     ${search ? `<p>Searching: <b>${escWml(search)}</b> | <a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}">[Clear]</a></p>` : ''}`
   
-  // Simplified search form (like contacts)
-  const searchForm = `
-    <p><b>Search messages:</b></p>
-    <p>
-      <input name="q" title="Search..." value="${escWml(search)}" emptyok="true" size="15" maxlength="50"/>
-      <do type="accept" label="Search">
-        <go href="/wml/chat.wml" method="get">
-          <postfield name="jid" value="${escWml(jid)}"/>
-          <postfield name="q" value="$(q)"/>
-          <postfield name="page" value="1"/>
-          <postfield name="limit" value="${limit}"/>
-        </go>
-      </do>
-    </p>`
+  // Page info adapted to device
+  const pageInfo = isOldNokia ?
+    `<p>Msgs ${offset + 1}-${Math.min(offset + limit, totalMessages)}/${totalMessages}</p>` :
+    `<p><b>Messages ${offset + 1}-${Math.min(offset + limit, totalMessages)} of ${totalMessages}</b></p>
+     <p>Showing most recent first</p>`
   
-  // Chat info section
-  const chatInfo = `
-    <p><b>${escWml(chatName)}</b> ${isGroup ? '[GROUP]' : '[CHAT]'}</p>
-    <p>${escWml(number)} | Total: ${total} messages</p>`
+  // Quick actions adapted to device
+  const quickActions = isOldNokia ?
+    `<p><a href="/wml/send.text.wml?to=${encodeURIComponent(jid)}" accesskey="1">1-Send</a></p>
+     <p><a href="/wml/chats.wml" accesskey="0">0-Back</a></p>` :
+    `<p><b>Quick Actions:</b></p>
+     <p>
+       <a href="/wml/send.text.wml?to=${encodeURIComponent(jid)}" accesskey="1">[1] Send Text</a> |
+       <a href="/wml/contact.wml?jid=${encodeURIComponent(jid)}" accesskey="4">[4] Contact Info</a>
+       ${number && !isGroup ? ` | <a href="wtai://wp/mc;${number}" accesskey="9">[9] Call</a>` : ''}
+       ${number && !isGroup ? ` | <a href="wtai://wp/ms;${number};">[SMS]</a>` : ''}
+     </p>
+     <p>
+       <a href="/wml/chats.wml" accesskey="0">[0] Back to Chats</a> |
+       <a href="/wml/home.wml" accesskey="*">[*] Home</a>
+     </p>`
   
-  // Quick actions section
-  const quickActions = `
-    <p><b>Quick Actions:</b></p>
-    <p>
-      <a href="/wml/send.text.wml?to=${encodeURIComponent(jid)}">[Send Message]</a> |
-      <a href="/wml/contact.wml?jid=${encodeURIComponent(jid)}">[Contact Info]</a>
-      ${number && !isGroup ? ` | <a href="wtai://wp/mc;${number}">[Call]</a>` : ''}
-      ${number && !isGroup ? ` | <a href="wtai://wp/ms;${number};">[SMS]</a>` : ''}
-    </p>`
+  // Build final body
+  const chatTitle = isOldNokia ? 
+    (chatName.length > 15 ? chatName.substring(0, 15) : chatName) : 
+    chatName
   
-  // WML card body
-  const body = `
-    <p><b>Chat - Page ${page}/${Math.ceil(total/limit) || 1}</b></p>
-    ${chatInfo}
-    ${searchForm}
-    ${searchHeader}
-    ${messageList}
-    ${pagination}
-    ${quickActions}
-    <p>
-      <a href="/wml/chats.wml">[Back to Chats]</a> |
-      <a href="/wml/home.wml">[Home]</a>
-    </p>
-    <do type="accept" label="Send">
-      <go href="/wml/send.text.wml?to=${encodeURIComponent(jid)}"/>
-    </do>
-    <do type="options" label="Menu">
-      <go href="/wml/menu.wml"/>
-    </do>
-  `
+  const body = isOldNokia ?
+    `<p>${escWml(chatTitle)}</p>
+${pageInfo}
+${searchForm}
+${messageList}
+${newerLink}
+${olderLink}
+${quickActions}` :
+    `<p><b>${escWml(chatTitle)}</b> ${isGroup ? '[GROUP]' : '[CHAT]'}</p>
+<p>${escWml(number)} | Total: ${totalMessages} messages</p>
+${searchForm}
+${pageInfo}
+${messageList}
+<p><b>Navigation:</b></p>
+<p>${olderLink} ${olderLink && newerLink ? ' | ' : ''} ${newerLink}</p>
+${quickActions}`
   
-  // Create complete WML string
+  // Create WML output with appropriate DOCTYPE
   const wmlOutput = `<?xml version="1.0"?>
 <!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN" "http://www.wapforum.org/DTD/wml_1.1.xml">
 <wml>
-  <head>
-    <meta http-equiv="Cache-Control" content="max-age=0"/>
-  </head>
-  <card id="chat" title="${escWml(chatName)}">
-    ${body}
-  </card>
-</wml>`;
+<head><meta http-equiv="Cache-Control" content="max-age=0"/></head>
+<card id="chat" title="Chat">
+${body}
+<do type="accept" label="Send">
+  <go href="/wml/send.text.wml?to=${encodeURIComponent(jid)}"/>
+</do>
+<do type="options" label="Refresh">
+  <go href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;offset=${offset}&amp;search=${encodeURIComponent(search)}"/>
+</do>
+</card>
+</wml>`
   
-  // --- KEY MODIFICATIONS FOR COMPATIBILITY (like contacts and chats) ---
+  // Set appropriate headers
+  res.setHeader('Content-Type', 'text/vnd.wap.wml; charset=iso-8859-1')
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+  res.setHeader('Pragma', 'no-cache')
+  res.setHeader('Expires', '0')
   
-  // 1. Set headers for WAP 1.0 with correct encoding (ISO-8859-1)
-  res.setHeader('Content-Type', 'text/vnd.wap.wml; charset=iso-8859-1');
-  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
-  
-  // 2. Encode the entire WML string to ISO-8859-1 buffer
-  const encodedBuffer = iconv.encode(wmlOutput, 'iso-8859-1');
-  
-  // 3. Send the encoded buffer
-  res.send(encodedBuffer);
-});
+  const encodedBuffer = iconv.encode(wmlOutput, 'iso-8859-1')
+  res.send(encodedBuffer)
+})
+// Route per visualizzare info media - WAP friendly come QR
+app.get('/wml/media-info.wml', async (req, res) => {
+  try {
+    const messageId = req.query.mid || ''
+    const jid = req.query.jid || ''
+    
+    // Find message in the specific chat
+    const messages = chatStore.get(jid) || []
+    const targetMessage = messages.find(m => m.key.id === messageId)
+    
+    const contact = contactStore.get(jid)
+    const chatName = contact?.name || contact?.notify || jidFriendly(jid)
+    
+    // Simple escaping
+    const esc = text => (text || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+    
+    const body = targetMessage ? (() => {
+      if (targetMessage.message?.imageMessage) {
+        const img = targetMessage.message.imageMessage
+        const size = Math.round((img.fileLength || 0) / 1024)
+        const caption = img.caption ? `<p><b>Caption:</b> ${esc(img.caption)}</p>` : ''
+        
+        return `<p><b>Image Message</b></p>
+<p>From: ${esc(chatName)}</p>
+<p>Size: ${size}KB</p>
+<p>Type: ${img.mimetype || 'image/jpeg'}</p>
+${caption}
+<p><b>Download Options:</b></p>
+<p>
+<a href="/wml/media/${encodeURIComponent(messageId)}.jpg">[JPG]</a> |
+<a href="/wml/media/${encodeURIComponent(messageId)}.wbmp">[WBMP]</a>
+</p>`
 
+      } else if (targetMessage.message?.videoMessage) {
+        const vid = targetMessage.message.videoMessage
+        const size = Math.round((vid.fileLength || 0) / 1024)
+        const duration = vid.seconds || 0
+        const caption = vid.caption ? `<p><b>Caption:</b> ${esc(vid.caption)}</p>` : ''
+        
+        return `<p><b>Video Message</b></p>
+<p>From: ${esc(chatName)}</p>
+<p>Size: ${size}KB | Duration: ${duration}s</p>
+<p>Type: ${vid.mimetype || 'video/mp4'}</p>
+${caption}
+<p><b>Download Options:</b></p>
+<p>
+<a href="/wml/media/${encodeURIComponent(messageId)}.mp4">[MP4]</a> |
+<a href="/wml/media/${encodeURIComponent(messageId)}.3gp">[3GP]</a>
+</p>`
+
+      } else if (targetMessage.message?.audioMessage) {
+        const aud = targetMessage.message.audioMessage
+        const size = Math.round((aud.fileLength || 0) / 1024)
+        const duration = aud.seconds || 0
+        
+        return `<p><b>Audio Message</b></p>
+<p>From: ${esc(chatName)}</p>
+<p>Size: ${size}KB | Duration: ${duration}s</p>
+<p>Type: ${aud.mimetype || 'audio/ogg'}</p>
+<p><b>Download Options:</b></p>
+<p>
+<a href="/wml/media/${encodeURIComponent(messageId)}.ogg">[OGG]</a> |
+<a href="/wml/media/${encodeURIComponent(messageId)}.wav">[WAV]</a>
+</p>`
+
+      } else if (targetMessage.message?.documentMessage) {
+        const doc = targetMessage.message.documentMessage
+        const size = Math.round((doc.fileLength || 0) / 1024)
+        const filename = doc.fileName || 'document'
+        const ext = filename.split('.').pop() || 'bin'
+        
+        return `<p><b>Document</b></p>
+<p>From: ${esc(chatName)}</p>
+<p>Name: ${esc(filename)}</p>
+<p>Size: ${size}KB</p>
+<p>Type: ${doc.mimetype || 'unknown'}</p>
+<p><b>Download Options:</b></p>
+<p>
+<a href="/wml/media/${encodeURIComponent(messageId)}.${ext}">[Original]</a> |
+<a href="/wml/media-text/${encodeURIComponent(messageId)}">[Text View]</a>
+</p>`
+
+      } else if (targetMessage.message?.stickerMessage) {
+        const sticker = targetMessage.message.stickerMessage
+        const size = Math.round((sticker.fileLength || 0) / 1024)
+        
+        return `<p><b>Sticker</b></p>
+<p>From: ${esc(chatName)}</p>
+<p>Size: ${size}KB</p>
+<p>Type: image/webp</p>
+<p><b>Download Options:</b></p>
+<p>
+<a href="/wml/media/${encodeURIComponent(messageId)}.webp">[WEBP]</a> |
+<a href="/wml/media/${encodeURIComponent(messageId)}.wbmp">[WBMP]</a>
+</p>`
+      }
+      
+      return '<p><b>Unknown Media Type</b></p>'
+    })() : `<p><b>Media Not Found</b></p>
+<p>Message may have been deleted</p>
+<p>Please try refreshing the chat</p>`
+
+    const body_full = `${body}
+<p>
+<a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}" accesskey="0">[0] Back to Chat</a> |
+<a href="/wml/chats.wml" accesskey="9">[9] All Chats</a>
+</p>
+<do type="accept" label="Back">
+<go href="/wml/chat.wml?jid=${encodeURIComponent(jid)}"/>
+</do>
+<do type="options" label="Refresh">
+<go href="/wml/media-info.wml?mid=${encodeURIComponent(messageId)}&amp;jid=${encodeURIComponent(jid)}"/>
+</do>`
+
+    const wmlOutput = `<?xml version="1.0"?>
+<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN" "http://www.wapforum.org/DTD/wml_1.1.xml">
+<wml>
+<head><meta http-equiv="Cache-Control" content="max-age=0"/></head>
+<card id="media" title="Media Info">
+${body_full}
+</card>
+</wml>`
+    
+    res.setHeader('Content-Type', 'text/vnd.wap.wml; charset=iso-8859-1')
+    res.setHeader('Cache-Control', 'no-cache')
+    res.setHeader('Pragma', 'no-cache')
+    
+    const encodedBuffer = iconv.encode(wmlOutput, 'iso-8859-1')
+    res.send(encodedBuffer)
+    
+  } catch (error) {
+    logger.error('Media info error:', error)
+    res.status(500).send('Error loading media info')
+  }
+})
+
+// Route per scaricare media - solo quando richiesto esplicitamente
+app.get('/wml/media/:filename', async (req, res) => {
+  try {
+    const filename = req.params.filename
+    const messageId = filename.split('.')[0]
+    
+    // Find message in all chats
+    let targetMessage = null
+    
+    for (const [jid, messages] of chatStore.entries()) {
+      const found = messages.find(m => m.key.id === decodeURIComponent(messageId))
+      if (found) {
+        targetMessage = found
+        break
+      }
+    }
+    
+    if (!targetMessage || !sock) {
+      res.status(404).send('Media not found')
+      return
+    }
+    
+    // Download media
+    let mediaData = null
+    let mimeType = 'application/octet-stream'
+    let filename_out = filename
+    
+    if (targetMessage.message?.imageMessage) {
+      mediaData = await downloadMediaMessage(targetMessage, 'buffer', {}, { 
+        logger,
+        reuploadRequest: sock.updateMediaMessage 
+      })
+      mimeType = 'image/jpeg'
+      filename_out = `image_${messageId}.jpg`
+      
+    } else if (targetMessage.message?.videoMessage) {
+      mediaData = await downloadMediaMessage(targetMessage, 'buffer', {}, { 
+        logger,
+        reuploadRequest: sock.updateMediaMessage 
+      })
+      mimeType = 'video/mp4'
+      filename_out = `video_${messageId}.mp4`
+      
+    } else if (targetMessage.message?.audioMessage) {
+      mediaData = await downloadMediaMessage(targetMessage, 'buffer', {}, { 
+        logger,
+        reuploadRequest: sock.updateMediaMessage 
+      })
+      mimeType = 'audio/ogg'
+      filename_out = `audio_${messageId}.ogg`
+      
+    } else if (targetMessage.message?.documentMessage) {
+      const doc = targetMessage.message.documentMessage
+      mediaData = await downloadMediaMessage(targetMessage, 'buffer', {}, { 
+        logger,
+        reuploadRequest: sock.updateMediaMessage 
+      })
+      mimeType = doc.mimetype || 'application/octet-stream'
+      filename_out = doc.fileName || `document_${messageId}.bin`
+      
+    } else if (targetMessage.message?.stickerMessage) {
+      mediaData = await downloadMediaMessage(targetMessage, 'buffer', {}, { 
+        logger,
+        reuploadRequest: sock.updateMediaMessage 
+      })
+      mimeType = 'image/webp'
+      filename_out = `sticker_${messageId}.webp`
+    }
+    
+    if (!mediaData) {
+      res.status(404).send('Could not download')
+      return
+    }
+    
+    // Headers for download
+    res.setHeader('Content-Type', mimeType)
+    res.setHeader('Content-Disposition', `attachment; filename="${filename_out}"`)
+    res.setHeader('Content-Length', mediaData.length)
+    
+    res.send(mediaData)
+    
+  } catch (error) {
+    logger.error('Media download error:', error)
+    res.status(500).send('Download error')
+  }
+})
+
+
+// Route per visualizzare info media - WAP friendly come QR
+app.get('/wml/media-info.wml', async (req, res) => {
+  try {
+    const messageId = req.query.mid || ''
+    const jid = req.query.jid || ''
+    
+    // Find message in the specific chat
+    const messages = chatStore.get(jid) || []
+    const targetMessage = messages.find(m => m.key.id === messageId)
+    
+    const contact = contactStore.get(jid)
+    const chatName = contact?.name || contact?.notify || jidFriendly(jid)
+    
+    // Simple escaping
+    const esc = text => (text || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+    
+    const body = targetMessage ? (() => {
+      if (targetMessage.message?.imageMessage) {
+        const img = targetMessage.message.imageMessage
+        const size = Math.round((img.fileLength || 0) / 1024)
+        const caption = img.caption ? `<p><b>Caption:</b> ${esc(img.caption)}</p>` : ''
+        
+        return `<p><b>Image Message</b></p>
+<p>From: ${esc(chatName)}</p>
+<p>Size: ${size}KB</p>
+<p>Type: ${img.mimetype || 'image/jpeg'}</p>
+${caption}
+<p><b>Nokia Compatible:</b></p>
+<p>
+<a href="/wml/media/${encodeURIComponent(messageId)}.jpg">[Small JPG]</a> |
+<a href="/wml/media/${encodeURIComponent(messageId)}.png">[Small PNG]</a> |
+<a href="/wml/media/${encodeURIComponent(messageId)}.wbmp">[WBMP]</a>
+</p>
+<p><b>Full Quality:</b></p>
+<p>
+<a href="/wml/media/${encodeURIComponent(messageId)}.original.jpg">[Original JPG]</a> |
+<a href="/wml/media/${encodeURIComponent(messageId)}.original.png">[Original PNG]</a>
+</p>`
+
+      } else if (targetMessage.message?.videoMessage) {
+        const vid = targetMessage.message.videoMessage
+        const size = Math.round((vid.fileLength || 0) / 1024)
+        const duration = vid.seconds || 0
+        const caption = vid.caption ? `<p><b>Caption:</b> ${esc(vid.caption)}</p>` : ''
+        
+        return `<p><b>Video Message</b></p>
+<p>From: ${esc(chatName)}</p>
+<p>Size: ${size}KB | Duration: ${duration}s</p>
+<p>Type: ${vid.mimetype || 'video/mp4'}</p>
+${caption}
+<p><b>Mobile Compatible:</b></p>
+<p>
+<a href="/wml/media/${encodeURIComponent(messageId)}.3gp">[3GP]</a> |
+<a href="/wml/media/${encodeURIComponent(messageId)}.avi">[AVI]</a>
+</p>
+<p><b>Full Quality:</b></p>
+<p>
+<a href="/wml/media/${encodeURIComponent(messageId)}.original.mp4">[Original MP4]</a> |
+<a href="/wml/media/${encodeURIComponent(messageId)}.original.webm">[WEBM]</a>
+</p>`
+
+      } else if (targetMessage.message?.audioMessage) {
+        const aud = targetMessage.message.audioMessage
+        const size = Math.round((aud.fileLength || 0) / 1024)
+        const duration = aud.seconds || 0
+        
+        return `<p><b>Audio Message</b></p>
+<p>From: ${esc(chatName)}</p>
+<p>Size: ${size}KB | Duration: ${duration}s</p>
+<p>Type: ${aud.mimetype || 'audio/ogg'}</p>
+<p><b>Compatible Formats:</b></p>
+<p>
+<a href="/wml/media/${encodeURIComponent(messageId)}.wav">[WAV]</a> |
+<a href="/wml/media/${encodeURIComponent(messageId)}.mp3">[MP3]</a>
+</p>
+<p><b>Original Format:</b></p>
+<p>
+<a href="/wml/media/${encodeURIComponent(messageId)}.original.ogg">[Original OGG]</a> |
+<a href="/wml/media/${encodeURIComponent(messageId)}.original.aac">[AAC]</a>
+</p>`
+
+      } else if (targetMessage.message?.documentMessage) {
+        const doc = targetMessage.message.documentMessage
+        const size = Math.round((doc.fileLength || 0) / 1024)
+        const filename = doc.fileName || 'document'
+        const ext = filename.split('.').pop() || 'bin'
+        
+        return `<p><b>Document</b></p>
+<p>From: ${esc(chatName)}</p>
+<p>Name: ${esc(filename)}</p>
+<p>Size: ${size}KB</p>
+<p>Type: ${doc.mimetype || 'unknown'}</p>
+<p><b>Download Options:</b></p>
+<p>
+<a href="/wml/media/${encodeURIComponent(messageId)}.${ext}">[Original]</a> |
+<a href="/wml/media-text/${encodeURIComponent(messageId)}">[Text View]</a>
+</p>`
+
+      } else if (targetMessage.message?.stickerMessage) {
+        const sticker = targetMessage.message.stickerMessage
+        const size = Math.round((sticker.fileLength || 0) / 1024)
+        
+        return `<p><b>Sticker</b></p>
+<p>From: ${esc(chatName)}</p>
+<p>Size: ${size}KB</p>
+<p>Type: image/webp</p>
+<p><b>Nokia Compatible:</b></p>
+<p>
+<a href="/wml/media/${encodeURIComponent(messageId)}.wbmp">[WBMP]</a> |
+<a href="/wml/media/${encodeURIComponent(messageId)}.jpg">[Small JPG]</a>
+</p>
+<p><b>Other Formats:</b></p>
+<p>
+<a href="/wml/media/${encodeURIComponent(messageId)}.original.webp">[Original WEBP]</a> |
+<a href="/wml/media/${encodeURIComponent(messageId)}.png">[PNG]</a>
+</p>`
+      }
+      
+      return '<p><b>Unknown Media Type</b></p>'
+    })() : `<p><b>Media Not Found</b></p>
+<p>Message may have been deleted</p>
+<p>Please try refreshing the chat</p>`
+
+    const body_full = `${body}
+<p>
+<a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}" accesskey="0">[0] Back to Chat</a> |
+<a href="/wml/chats.wml" accesskey="9">[9] All Chats</a>
+</p>
+<do type="accept" label="Back">
+<go href="/wml/chat.wml?jid=${encodeURIComponent(jid)}"/>
+</do>
+<do type="options" label="Refresh">
+<go href="/wml/media-info.wml?mid=${encodeURIComponent(messageId)}&amp;jid=${encodeURIComponent(jid)}"/>
+</do>`
+
+    const wmlOutput = `<?xml version="1.0"?>
+<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN" "http://www.wapforum.org/DTD/wml_1.1.xml">
+<wml>
+<head><meta http-equiv="Cache-Control" content="max-age=0"/></head>
+<card id="media" title="Media Info">
+${body_full}
+</card>
+</wml>`
+    
+    res.setHeader('Content-Type', 'text/vnd.wap.wml; charset=iso-8859-1')
+    res.setHeader('Cache-Control', 'no-cache')
+    res.setHeader('Pragma', 'no-cache')
+    
+    const encodedBuffer = iconv.encode(wmlOutput, 'iso-8859-1')
+    res.send(encodedBuffer)
+    
+  } catch (error) {
+    logger.error('Media info error:', error)
+    res.status(500).send('Error loading media info')
+  }
+})
+
+// Route per scaricare media - solo quando richiesto esplicitamente
+app.get('/wml/media/:filename', async (req, res) => {
+  try {
+    const filename = req.params.filename
+    const parts = filename.split('.')
+    const messageId = parts[0]
+    const requestedFormat = parts.slice(-1)[0].toLowerCase()
+    const isOriginal = parts.includes('original')
+    
+    // Find message in all chats
+    let targetMessage = null
+    
+    for (const [jid, messages] of chatStore.entries()) {
+      const found = messages.find(m => m.key.id === decodeURIComponent(messageId))
+      if (found) {
+        targetMessage = found
+        break
+      }
+    }
+    
+    if (!targetMessage || !sock) {
+      res.status(404).send('Media not found')
+      return
+    }
+    
+    // Download media
+    let mediaData = await downloadMediaMessage(targetMessage, 'buffer', {}, { 
+      logger,
+      reuploadRequest: sock.updateMediaMessage 
+    })
+    
+    if (!mediaData) {
+      res.status(404).send('Could not download')
+      return
+    }
+    
+    let mimeType = 'application/octet-stream'
+    let filename_out = filename
+    
+    // Handle different formats for Nokia 7210 compatibility
+    if (targetMessage.message?.imageMessage) {
+      if (isOriginal) {
+        // Serve original file without optimization
+        if (requestedFormat === 'png') {
+          mimeType = 'image/png'
+          filename_out = `image_${messageId}_original.png`
+        } else {
+          mimeType = 'image/jpeg' 
+          filename_out = `image_${messageId}_original.jpg`
+        }
+      } else if (requestedFormat === 'wbmp') {
+        // Convert image to WBMP for extreme compatibility
+        try {
+          const sharp = require('sharp')
+          
+          const wbmpData = await sharp(mediaData)
+            .resize(96, 65, { fit: 'inside' })
+            .grayscale()
+            .threshold(128)
+            .raw()
+            .toBuffer()
+          
+          const wbmpHeader = Buffer.from([0x00, 0x00, 96, 65])
+          mediaData = Buffer.concat([wbmpHeader, wbmpData])
+          mimeType = 'image/vnd.wap.wbmp'
+          filename_out = `image_${messageId}.wbmp`
+          
+        } catch (conversionError) {
+          logger.warn('WBMP conversion failed:', conversionError.message)
+          mimeType = 'image/jpeg'
+          filename_out = `image_${messageId}.jpg`
+        }
+      } else if (requestedFormat === 'png') {
+        // Optimize PNG for Nokia 7210 - small size, low colors
+        try {
+          const sharp = require('sharp')
+          
+          mediaData = await sharp(mediaData)
+            .resize(128, 128, { fit: 'inside', withoutEnlargement: true }) // Max 128x128
+            .png({ 
+              compressionLevel: 9,        // Maximum compression
+              colors: 16,                 // Reduce to 16 colors
+              quality: 50                 // Lower quality for smaller size
+            })
+            .toBuffer()
+          
+          mimeType = 'image/png'
+          filename_out = `image_${messageId}_small.png`
+          
+        } catch (conversionError) {
+          logger.warn('PNG optimization failed:', conversionError.message)
+          mimeType = 'image/png'
+          filename_out = `image_${messageId}.png`
+        }
+      } else {
+        // Default: Optimize JPG for Nokia 7210 - very small file size
+        try {
+          const sharp = require('sharp')
+          
+          mediaData = await sharp(mediaData)
+            .resize(128, 128, { fit: 'inside', withoutEnlargement: true }) // Max 128x128  
+            .jpeg({ 
+              quality: 40,                // Low quality = small size
+              progressive: false,         // Nokia compatibility
+              mozjpeg: false             // Standard JPEG
+            })
+            .toBuffer()
+          
+          mimeType = 'image/jpeg'
+          filename_out = `image_${messageId}_small.jpg`
+          
+        } catch (conversionError) {
+          logger.warn('JPEG optimization failed:', conversionError.message)
+          mimeType = 'image/jpeg'
+          filename_out = `image_${messageId}.jpg`
+        }
+      }
+      
+    } else if (targetMessage.message?.videoMessage) {
+      if (isOriginal) {
+        // Serve original video file
+        if (requestedFormat === 'webm') {
+          mimeType = 'video/webm'
+          filename_out = `video_${messageId}_original.webm`
+        } else {
+          mimeType = 'video/mp4'
+          filename_out = `video_${messageId}_original.mp4`
+        }
+      } else if (requestedFormat === '3gp') {
+        // Nokia 7210 compatible 3GP
+        mimeType = 'video/3gpp'
+        filename_out = `video_${messageId}.3gp`
+      } else if (requestedFormat === 'avi') {
+        // Alternative mobile format
+        mimeType = 'video/x-msvideo'
+        filename_out = `video_${messageId}.avi`
+      } else {
+        // Default MP4
+        mimeType = 'video/mp4'
+        filename_out = `video_${messageId}.mp4`
+      }
+      
+    } else if (targetMessage.message?.audioMessage) {
+      if (isOriginal) {
+        // Serve original audio file
+        if (requestedFormat === 'aac') {
+          mimeType = 'audio/aac'
+          filename_out = `audio_${messageId}_original.aac`
+        } else {
+          mimeType = 'audio/ogg'
+          filename_out = `audio_${messageId}_original.ogg`
+        }
+      } else if (requestedFormat === 'wav') {
+        // Nokia compatible WAV
+        mimeType = 'audio/wav'
+        filename_out = `audio_${messageId}.wav`
+      } else if (requestedFormat === 'mp3') {
+        // Universal MP3
+        mimeType = 'audio/mpeg'
+        filename_out = `audio_${messageId}.mp3`
+      } else {
+        // Default OGG
+        mimeType = 'audio/ogg'
+        filename_out = `audio_${messageId}.ogg`
+      }
+      
+    } else if (targetMessage.message?.documentMessage) {
+      const doc = targetMessage.message.documentMessage
+      mimeType = doc.mimetype || 'application/octet-stream'
+      filename_out = doc.fileName || `document_${messageId}.bin`
+      
+    } else if (targetMessage.message?.stickerMessage) {
+      if (requestedFormat === 'wbmp') {
+        // Convert sticker to WBMP for Nokia
+        try {
+          const sharp = require('sharp')
+          
+          const wbmpData = await sharp(mediaData)
+            .resize(32, 32, { fit: 'inside' }) // Small size for stickers
+            .grayscale()
+            .threshold(128)
+            .raw()
+            .toBuffer()
+          
+          const wbmpHeader = Buffer.from([0x00, 0x00, 32, 32])
+          mediaData = Buffer.concat([wbmpHeader, wbmpData])
+          mimeType = 'image/vnd.wap.wbmp'
+          filename_out = `sticker_${messageId}.wbmp`
+          
+        } catch (conversionError) {
+          logger.warn('Sticker WBMP conversion failed:', conversionError.message)
+          mimeType = 'image/webp'
+          filename_out = `sticker_${messageId}.webp`
+        }
+      } else {
+        mimeType = 'image/webp'
+        filename_out = `sticker_${messageId}.webp`
+      }
+    }
+    
+    // Nokia 7210 compatible headers
+    res.setHeader('Content-Type', mimeType)
+    res.setHeader('Content-Disposition', `attachment; filename="${filename_out}"`)
+    res.setHeader('Content-Length', mediaData.length)
+    res.setHeader('Cache-Control', 'public, max-age=3600')
+    
+    res.send(mediaData)
+    
+  } catch (error) {
+    logger.error('Media download error:', error)
+    res.status(500).send('Download error')
+  }
+})
+/*
+app.get('/wml/chat.wml', async (req, res) => {
+  const userAgent = req.headers['user-agent'] || ''
+  const isOldNokia = /Nokia|Series40|MAUI|UP\.Browser/i.test(userAgent)
+  
+  const raw = req.query.jid || ''
+  const jid = formatJid(raw)
+  const offset = Math.max(0, parseInt(req.query.offset || '0'))
+  const search = (req.query.search || '').trim().toLowerCase()
+  
+  // Very small limits for Nokia 7210
+  const limit = isOldNokia ? 3 : 10
+  
+  // Load chat history if missing
+  if ((!chatStore.get(jid) || chatStore.get(jid).length === 0) && sock) {
+    try {
+      await loadChatHistory(jid, limit * 3)
+    } catch (e) {
+      logger.warn(`Failed to load chat history for ${jid}: ${e.message}`)
+    }
+  }
+  
+  let allMessages = (chatStore.get(jid) || []).slice()
+  
+  // Sort by timestamp - MOST RECENT FIRST
+  allMessages.sort((a, b) => {
+    const tsA = Number(a.messageTimestamp) || 0
+    const tsB = Number(b.messageTimestamp) || 0
+    return tsB - tsA // Most recent first
+  })
+  
+  // Apply search filter if present
+  if (search) {
+    allMessages = allMessages.filter(m => (messageText(m) || '').toLowerCase().includes(search))
+  }
+  
+  const total = allMessages.length
+  const items = allMessages.slice(offset, offset + limit)
+  
+  const contact = contactStore.get(jid)
+  const chatName = contact?.name || contact?.notify || contact?.verifiedName || jidFriendly(jid)
+  const number = jidFriendly(jid)
+  const isGroup = jid.endsWith('@g.us')
+  
+  // Simple escaping for Nokia 7210
+  const esc = text => (text || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+  
+  // Simple truncate
+  const truncate = (text, maxLength) => {
+    if (!text) return ''
+    if (text.length <= maxLength) return text
+    return text.substring(0, maxLength - 3) + '...'
+  }
+  
+  // Simple timestamp for Nokia
+  const formatTime = (timestamp) => {
+    const date = new Date(Number(timestamp) * 1000)
+    if (isNaN(date.getTime())) return ''
+    
+    const day = date.getDate().toString().padStart(2, '0')
+    const month = (date.getMonth() + 1).toString().padStart(2, '0')
+    const hours = date.getHours().toString().padStart(2, '0')
+    const mins = date.getMinutes().toString().padStart(2, '0')
+    
+    return `${day}/${month} ${hours}:${mins}`
+  }
+  
+  let messageList = ''
+  
+  if (items.length === 0) {
+    messageList = '<p>No messages</p>'
+  } else {
+    messageList = items.map((m, idx) => {
+      const who = m.key.fromMe ? 'Me' : (chatName.length > 10 ? chatName.substring(0, 10) : chatName)
+      const time = formatTime(m.messageTimestamp)
+      const msgNumber = idx + 1
+      const mid = m.key.id
+      
+      // Handle different message types for Nokia
+      let text = ''
+      let mediaLink = ''
+      
+      if (m.message) {
+        if (m.message.imageMessage) {
+          const img = m.message.imageMessage
+          const size = Math.round((img.fileLength || 0) / 1024)
+          text = `[IMG ${size}KB]`
+          if (img.caption) text += ` ${truncate(img.caption, 30)}`
+          mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View IMG]</a>`
+          
+        } else if (m.message.videoMessage) {
+          const vid = m.message.videoMessage
+          const size = Math.round((vid.fileLength || 0) / 1024)
+          text = `[VID ${size}KB]`
+          if (vid.caption) text += ` ${truncate(vid.caption, 30)}`
+          mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View VID]</a>`
+          
+        } else if (m.message.audioMessage) {
+          const aud = m.message.audioMessage
+          const size = Math.round((aud.fileLength || 0) / 1024)
+          const duration = aud.seconds || 0
+          text = `[AUD ${size}KB ${duration}s]`
+          mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View AUD]</a>`
+          
+        } else if (m.message.documentMessage) {
+          const doc = m.message.documentMessage
+          const size = Math.round((doc.fileLength || 0) / 1024)
+          const filename = doc.fileName || 'file'
+          text = `[DOC ${size}KB] ${truncate(filename, 20)}`
+          mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View DOC]</a>`
+          
+        } else if (m.message.stickerMessage) {
+          text = '[STICKER]'
+          mediaLink = `<br/><a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}">[View STK]</a>`
+          
+        } else {
+          text = truncate(messageText(m) || '', 50)
+        }
+      } else {
+        text = truncate(messageText(m) || '', 50)
+      }
+      
+      return `<p>${msgNumber}. ${esc(who)} (${time})<br/>${esc(text)}${mediaLink}</p>`
+    }).join('')
+  }
+  
+  // Simple navigation for Nokia
+  const olderOffset = offset + limit
+  const olderLink = olderOffset < total ? 
+    `<p><a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;offset=${olderOffset}&amp;search=${encodeURIComponent(search)}" accesskey="2">2-Older</a></p>` : ''
+  
+  const newerOffset = Math.max(0, offset - limit)
+  const newerLink = offset > 0 ? 
+    `<p><a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;offset=${newerOffset}&amp;search=${encodeURIComponent(search)}" accesskey="3">3-Newer</a></p>` : ''
+  
+  // Simple search for Nokia
+  const searchBox = search ? 
+    `<p>Search: ${esc(search)}</p><p><a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}">Clear</a></p>` : 
+    `<p><a href="/wml/chat.wml?jid=${encodeURIComponent(jid)}&amp;search=prompt">Search</a></p>`
+  
+  const body = `<p>${esc(chatName.length > 15 ? chatName.substring(0, 15) : chatName)}</p>
+<p>Msgs ${offset + 1}-${Math.min(offset + limit, total)}/${total}</p>
+${searchBox}
+${messageList}
+${newerLink}
+${olderLink}
+<p><a href="/wml/send.text.wml?to=${encodeURIComponent(jid)}" accesskey="1">1-Send</a></p>
+<p><a href="/wml/chats.wml" accesskey="0">0-Back</a></p>`
+  
+  // Nokia 7210 compatible WML 1.1
+  const wmlOutput = `<?xml version="1.0"?>
+<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN" "http://www.wapforum.org/DTD/wml_1.1.xml">
+<wml>
+<head><meta http-equiv="Cache-Control" content="max-age=0"/></head>
+<card id="chat" title="Chat">
+${body}
+</card>
+</wml>`
+  
+  // Nokia 7210 headers
+  res.setHeader('Content-Type', 'text/vnd.wap.wml; charset=iso-8859-1')
+  res.setHeader('Cache-Control', 'no-cache')
+  res.setHeader('Pragma', 'no-cache')
+  
+  const encodedBuffer = iconv.encode(wmlOutput, 'iso-8859-1')
+  res.send(encodedBuffer)
+})*/
 // Enhanced Message Actions page
 app.get('/wml/msg.wml', (req, res) => {
   const mid = String(req.query.mid || '')
   const jid = formatJid(req.query.jid || '')
-  const msg = messageStore.get(mid)
+  
+  // Find message in the specific chat (using our new system)
+  const messages = chatStore.get(jid) || []
+  const msg = messages.find(m => m.key.id === mid)
   
   if (!msg) {
     sendWml(res, resultCard('Message', ['Message not found'], `/wml/chat.wml?jid=${encodeURIComponent(jid)}&limit=15`))
     return
   }
-  
+
   const text = truncate(messageText(msg), 150)
   const ts = new Date(Number(msg.messageTimestamp) * 1000).toLocaleString()
-  const mediaType = getContentType(msg.message)
-  const hasMedia = ['imageMessage', 'videoMessage', 'audioMessage', 'documentMessage', 'stickerMessage'].includes(mediaType)
+  
+  // Enhanced media detection
+  let mediaInfo = ''
+  let mediaActions = ''
+  let hasMedia = false
+  
+  if (msg.message) {
+    if (msg.message.imageMessage) {
+      const img = msg.message.imageMessage
+      const size = Math.round((img.fileLength || 0) / 1024)
+      mediaInfo = `<p><small>Type: Image (${size}KB)</small></p>`
+      mediaActions = `<a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}" accesskey="4">[4] View Image</a><br/>
+      <a href="/wml/media/${encodeURIComponent(mid)}.jpg" accesskey="5">[5] Download JPG</a><br/>`
+      hasMedia = true
+      
+    } else if (msg.message.videoMessage) {
+      const vid = msg.message.videoMessage
+      const size = Math.round((vid.fileLength || 0) / 1024)
+      const duration = vid.seconds || 0
+      mediaInfo = `<p><small>Type: Video (${size}KB, ${duration}s)</small></p>`
+      mediaActions = `<a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}" accesskey="4">[4] View Video</a><br/>
+      <a href="/wml/media/${encodeURIComponent(mid)}.mp4" accesskey="5">[5] Download MP4</a><br/>`
+      hasMedia = true
+      
+    } else if (msg.message.audioMessage) {
+      const aud = msg.message.audioMessage
+      const size = Math.round((aud.fileLength || 0) / 1024)
+      const duration = aud.seconds || 0
+      mediaInfo = `<p><small>Type: Audio (${size}KB, ${duration}s)</small></p>`
+      mediaActions = `<a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}" accesskey="4">[4] View Audio</a><br/>
+      <a href="/wml/media/${encodeURIComponent(mid)}.ogg" accesskey="5">[5] Download Audio</a><br/>`
+      hasMedia = true
+      
+    } else if (msg.message.documentMessage) {
+      const doc = msg.message.documentMessage
+      const size = Math.round((doc.fileLength || 0) / 1024)
+      const filename = doc.fileName || 'document'
+      mediaInfo = `<p><small>Type: Document (${size}KB)</small></p>
+      <p><small>File: ${esc(filename)}</small></p>`
+      const ext = filename.split('.').pop() || 'bin'
+      mediaActions = `<a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}" accesskey="4">[4] View Document</a><br/>
+      <a href="/wml/media/${encodeURIComponent(mid)}.${ext}" accesskey="5">[5] Download File</a><br/>`
+      hasMedia = true
+      
+    } else if (msg.message.stickerMessage) {
+      const sticker = msg.message.stickerMessage
+      const size = Math.round((sticker.fileLength || 0) / 1024)
+      mediaInfo = `<p><small>Type: Sticker (${size}KB)</small></p>`
+      mediaActions = `<a href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}" accesskey="4">[4] View Sticker</a><br/>
+      <a href="/wml/media/${encodeURIComponent(mid)}.webp" accesskey="5">[5] Download Sticker</a><br/>`
+      hasMedia = true
+    }
+  }
 
   const body = `
     <p><b>Message Details</b></p>
     <p>${esc(text)}</p>
     <p><small>Time: ${ts}</small></p>
     <p><small>From: ${msg.key.fromMe ? 'Me' : 'Them'}</small></p>
-    ${hasMedia ? `<p><small>Type: ${mediaType}</small></p>` : ''}
+    ${mediaInfo}
     
     <p><b>Actions:</b></p>
     <p>
       <a href="/wml/msg.reply.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}" accesskey="1">[1] Reply</a><br/>
       <a href="/wml/msg.react.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}" accesskey="2">[2] React</a><br/>
       <a href="/wml/msg.forward.wml?mid=${encodeURIComponent(mid)}" accesskey="3">[3] Forward</a><br/>
-      ${hasMedia ? `<a href="/wml/media.view.wml?mid=${encodeURIComponent(mid)}" accesskey="4">[4] View Media</a><br/>` : ''}
+      ${mediaActions}
       <a href="/wml/msg.delete.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}" accesskey="7">[7] Delete</a><br/>
       <a href="/wml/msg.read.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}" accesskey="8">[8] Mark Read</a><br/>
     </p>
@@ -1032,11 +2264,13 @@ app.get('/wml/msg.wml', (req, res) => {
     <do type="accept" label="Reply">
       <go href="/wml/msg.reply.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}"/>
     </do>
+    ${hasMedia ? `<do type="options" label="Media">
+      <go href="/wml/media-info.wml?mid=${encodeURIComponent(mid)}&amp;jid=${encodeURIComponent(jid)}"/>
+    </do>` : ''}
   `
-  
+
   sendWml(res, card('msg', 'Message', body))
 })
-
 // Enhanced Send Menu with quick access
 app.get('/wml/send-menu.wml', (req, res) => {
   const to = esc(req.query.to || '')
