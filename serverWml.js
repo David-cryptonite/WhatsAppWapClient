@@ -1108,7 +1108,7 @@ ${body}
 
 app.get('/wml/chat.wml', async (req, res) => {
   const userAgent = req.headers['user-agent'] || ''
-  const isOldNokia = /Nokia|Series40|MAUI|UP\.Browser/i.test(userAgent)
+  const isOldNokia = false
   
   const raw = req.query.jid || ''
   const jid = formatJid(raw)
